@@ -24,6 +24,22 @@
     color: #ff0000;
 }
 
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 48px;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #ff6b6b; /* Зміна кольору при наведенні */
+}
+
+
 .head {
 
     text-align: center;

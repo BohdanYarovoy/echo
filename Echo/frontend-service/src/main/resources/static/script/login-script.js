@@ -10,6 +10,23 @@ const emptyLogin = document.querySelector('.emptyLogin')
 const completeBtn2 = document.getElementById('signup')
 const error = document.querySelector('.error')
 
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButtons = document.querySelectorAll('.close-btn');
+    
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+   
+            log.classList.add('hide')
+            reg.classList.add('hide')
+            overlay.classList.add('hide'); 
+            
+           
+        });
+    });
+});
+
+
+
 
 
 const completeBtn = document.getElementById('login')
