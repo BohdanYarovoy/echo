@@ -84,7 +84,7 @@ public class User {
 
         if (!Objects.equals(this.dateOfBirth, user.getDateOfBirth())) {
             if (user.getDateOfBirth().isAfter(LocalDate.now())) {
-                throw new ParameterIsNullException(String.format("Parameter %s cannot be like %s. Please "));
+                throw new ParameterIsNullException(String.format("Date of birth cannot be like %s.", user.dateOfBirth));
             }
             this.dateOfBirth = user.getDateOfBirth();
         }
