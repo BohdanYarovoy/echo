@@ -1,18 +1,24 @@
 package com.echoteam.app.entities;
 
-import com.echoteam.exceptions.ParameterIsNullException;
+import com.echoteam.app.exceptions.ParameterIsNotValidException;
+import com.echoteam.app.exceptions.ParameterIsNullException;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,7 +28,10 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "nickname", unique = true, nullable = false)
+    private String nickname;
+
+    @Column(name = "first_name", nullable = false)
     private String firstname;
 
     @Column(name = "last_name")
@@ -32,34 +41,47 @@ public class User {
     private String patronymic;
 
     @Column(name = "sex")
-    private String sex;
+    private Sex sex;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "created", updatable = false)
-    private LocalDate created;
+    private Timestamp created;
 
     @Column(name = "changed")
-    private LocalDate changed;
+    private Timestamp changed;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonManagedReference
+    // todo: replace this solution. Create standard DTO for user.
     private List<UserRole> roles;
 
-    public void acceptChanges(User user) throws ParameterIsNullException {
-        if (Objects.isNull(user)) {
-            throw new ParameterIsNullException();
+
+    @PrePersist
+    protected void onCreate() {
+        this.created = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.changed = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public void acceptChanges(User user) throws ParameterIsNotValidException {
+        if (!Objects.equals(this.nickname, user.getNickname())) {
+            this.nickname = user.getNickname();
         }
 
         if (!Objects.equals(this.firstname, user.getFirstname())) {
@@ -84,7 +106,7 @@ public class User {
 
         if (!Objects.equals(this.dateOfBirth, user.getDateOfBirth())) {
             if (user.getDateOfBirth().isAfter(LocalDate.now())) {
-                throw new ParameterIsNullException(String.format("Date of birth cannot be like %s.", user.dateOfBirth));
+                throw new ParameterIsNotValidException(String.format("Date of birth cannot be like %s.", user.dateOfBirth));
             }
             this.dateOfBirth = user.getDateOfBirth();
         }

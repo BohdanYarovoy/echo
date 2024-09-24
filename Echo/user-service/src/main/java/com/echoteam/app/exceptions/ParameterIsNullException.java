@@ -1,4 +1,4 @@
-package com.echoteam.exceptions;
+package com.echoteam.app.exceptions;
 
 public class ParameterIsNullException  extends Exception{
 

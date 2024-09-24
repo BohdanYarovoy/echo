@@ -12,17 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "api/v1/users")
+@RequestMapping(value = "/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<?> getUsers() {
         List<User> users = userService.getAll();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(users);
+        return ResponseEntity.status(HttpStatus.OK).
+                body(users);
     }
+
+    // todo: fix all warnings that signs in console while it is running
 
 }
