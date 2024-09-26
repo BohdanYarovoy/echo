@@ -1,5 +1,6 @@
 package com.echoteam.app.entities;
 
+import com.echoteam.app.entities.dto.UserDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import com.echoteam.app.exceptions.ParameterIsNullException;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -64,14 +65,13 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @JsonManagedReference
-    // todo: replace this solution. Create standard DTO for user.
     private List<UserRole> roles;
 
 
     @PrePersist
     protected void onCreate() {
         this.created = Timestamp.valueOf(LocalDateTime.now());
+        this.changed = Timestamp.valueOf(LocalDateTime.now());
     }
 
     @PreUpdate
@@ -111,5 +111,37 @@ public class User {
             this.dateOfBirth = user.getDateOfBirth();
         }
 
+    }
+
+    public UserDTO toDTO() {
+        return new UserDTO(this.id,
+                this.nickname,
+                this.firstname,
+                this.lastname,
+                this.patronymic,
+                this.sex,
+                this.email,
+                this.password,
+                this.dateOfBirth,
+                this.created,
+                this.changed,
+                roles.stream().map(UserRole::toDTO).toList());
+    }
+
+    public static User of(UserDTO dto) {
+        User user = new User();
+        user.setId(dto.id());
+        user.setNickname(dto.nickname());
+        user.setFirstname(dto.firstname());
+        user.setLastname(dto.lastname());
+        user.setPatronymic(dto.patronymic());
+        user.setSex(dto.sex());
+        user.setEmail(dto.email());
+        user.setPassword(dto.password());
+        user.setDateOfBirth(dto.dateOfBirth());
+        user.setCreated(dto.created());
+        user.setChanged(dto.changed());
+        user.setRoles(dto.roles().stream().map(UserRole::of).toList());
+        return user;
     }
 }

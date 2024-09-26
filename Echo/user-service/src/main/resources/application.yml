@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/echo_user
+    url: jdbc:postgresql://localhost:5432/echo_user
     username: bodya
     password: 123
     driver-class-name: org.postgresql.Driver

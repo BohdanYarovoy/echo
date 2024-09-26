@@ -1,6 +1,6 @@
 package com.echoteam.app.entities;
 
-import com.echoteam.app.exceptions.ParameterIsNullException;
+import com.echoteam.app.entities.dto.UserRoleDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,15 +28,24 @@ public class UserRole {
     String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JsonBackReference
-    // todo: replace this solution. Create standard DTO for userRole.
     List<User> users;
+
+    public static UserRole of(UserRoleDTO dto) {
+        UserRole role = new UserRole();
+        role.setId(dto.id());
+        role.setName(dto.name());
+        return role;
+    }
 
 
     public void acceptChanges(UserRole userRole) {
         if (!Objects.equals(this.name, userRole.getName())) {
             this.name = userRole.getName();
         }
+    }
+
+    public UserRoleDTO toDTO() {
+        return new UserRoleDTO(this.id, this.name);
     }
 
 }

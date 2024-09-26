@@ -20,7 +20,7 @@ CREATE TABLE users
 
 CREATE TABLE roles
 (
-    role_id   SMALLINT,
+    role_id   SMALLSERIAL,
     role_name VARCHAR(50) UNIQUE NOT NULL,
     PRIMARY KEY (role_id)
 );

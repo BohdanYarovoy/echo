@@ -1,6 +1,8 @@
 package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserRole;
+import com.echoteam.app.entities.dto.UserRoleDTO;
+import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,14 +17,24 @@ class UserRoleServiceTest {
 
     @Test
     public void getAllUserRoles() {
-        List<UserRole> userRoles = userRoleService.getAll();
-        userRoles.forEach(r -> System.out.println(r.getName()));
+        List<UserRoleDTO> userRoles = userRoleService.getAll();
+        userRoles.forEach(System.out::println);
     }
 
     @Test
     public void getSpecifiedRolesByIn() {
-        List<UserRole> userRoles = userRoleService.getUserRolesByIdIn(List.of((short) 1, (short) 3));
-        userRoles.forEach(r -> System.out.println(r.getName()));
+        List<UserRoleDTO> userRoles = userRoleService.getUserRolesByIdIn(List.of((short) 1, (short) 3));
+        userRoles.forEach(System.out::println);
+    }
+
+    @Test
+    public void addRoleToDB() {
+        UserRoleDTO role = new UserRoleDTO(null, "FOMA");
+        try {
+            userRoleService.createUserRole(role);
+        } catch (ParameterIsNotValidException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

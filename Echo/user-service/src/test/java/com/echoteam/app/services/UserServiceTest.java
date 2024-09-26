@@ -3,6 +3,7 @@ package com.echoteam.app.services;
 import com.echoteam.app.entities.Sex;
 import com.echoteam.app.entities.User;
 import com.echoteam.app.entities.UserRole;
+import com.echoteam.app.entities.dto.UserRoleDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class UserServiceTest {
 
     @Test
     public void addUserToDB() {
-        List<UserRole> roles =  userRoleService.getUserRolesByIdIn(List.of((short)2));
+        List<UserRoleDTO> roles =  userRoleService.getUserRolesByIdIn(List.of((short)2));
 
         User user = User.builder()
                 .nickname("jacoonda")
@@ -32,10 +33,10 @@ class UserServiceTest {
                 .email("evene.olhovski@gmail.com")
                 .password("pass1234")
                 .dateOfBirth(LocalDate.of(2005,05,17))
-                .roles(roles)
+                .roles(roles.stream().map(UserRole::of).toList())
                 .build();
         try {
-            userService.createUser(user);
+            userService.createUser(user.toDTO());
         } catch (ParameterIsNotValidException e) {
             throw new RuntimeException(e);
         }
