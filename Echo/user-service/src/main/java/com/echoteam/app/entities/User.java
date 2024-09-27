@@ -104,6 +104,11 @@ public class User {
             this.email = user.getEmail();
         }
 
+        // TODO: it is temporary solution. In future it will more advanced mechanism to change password.
+        if (!Objects.equals(this.password, user.getPassword())) {
+            this.password = user.password;
+        }
+
         if (!Objects.equals(this.dateOfBirth, user.getDateOfBirth())) {
             if (user.getDateOfBirth().isAfter(LocalDate.now())) {
                 throw new ParameterIsNotValidException(String.format("Date of birth cannot be like %s.", user.dateOfBirth));

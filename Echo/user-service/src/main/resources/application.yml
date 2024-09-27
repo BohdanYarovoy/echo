@@ -7,12 +7,12 @@ spring:
     username: bodya
     password: 123
     driver-class-name: org.postgresql.Driver
-
   jpa:
     database: postgresql
+    show-sql: true
     hibernate:
       ddl-auto: validate
-    show-sql: true
-  # V__description.sql
   flyway:
     schemas: public
+    locations: classpath:db/migration/main
+    enabled: true

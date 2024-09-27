@@ -20,8 +20,8 @@ public class UserRoleController {
     public static final String USER_ROLE_URI = "/api/v1/user-roles";
     private final UserRoleService userRoleService;
 
-
-    // todo: поробити перевірки на null в усіх методах, бо у випадку відправлення null, сервер ніяк не реагує
+    // todo: поробити перевірки на null в усіх методах, бо у випадку відправлення null в not null поля,
+    // todo: сервер видає свою помилку а не bad-request як потрібно
 
     @GetMapping
     public ResponseEntity<?> getAllUserRoles() {

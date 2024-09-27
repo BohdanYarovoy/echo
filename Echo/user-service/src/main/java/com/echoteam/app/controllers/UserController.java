@@ -20,7 +20,8 @@ public class UserController {
     public static final String USER_URI = "/api/v1/users";
     private final UserService userService;
 
-    // todo: поробити перевірки на null в усіх методах, бо у випадку відправлення null, сервер ніяк не реагує
+    // todo: поробити перевірки на null в усіх методах, бо у випадку відправлення null в not null поля,
+    // todo: сервер видає свою помилку а не bad-request як потрібно
 
     @GetMapping
     public ResponseEntity<?> getUsers() {
