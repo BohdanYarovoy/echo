@@ -1,6 +1,6 @@
 package com.echoteam.app.exceptions;
 
-public class ParameterIsNotValidException extends Exception {
+public class ParameterIsNotValidException extends RuntimeException {
 
     public ParameterIsNotValidException() {
     }

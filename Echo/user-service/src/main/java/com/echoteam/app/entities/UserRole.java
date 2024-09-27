@@ -1,7 +1,6 @@
 package com.echoteam.app.entities;
 
 import com.echoteam.app.entities.dto.UserRoleDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

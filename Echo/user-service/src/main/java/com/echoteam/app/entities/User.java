@@ -2,8 +2,6 @@ package com.echoteam.app.entities;
 
 import com.echoteam.app.entities.dto.UserDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
-import com.echoteam.app.exceptions.ParameterIsNullException;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +11,10 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -111,6 +111,10 @@ public class User {
             this.dateOfBirth = user.getDateOfBirth();
         }
 
+        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+            this.roles = user.getRoles();
+        }
+
     }
 
     public UserDTO toDTO() {
@@ -125,7 +129,7 @@ public class User {
                 this.dateOfBirth,
                 this.created,
                 this.changed,
-                roles.stream().map(UserRole::toDTO).toList());
+                roles.stream().map(UserRole::toDTO).collect(Collectors.toCollection(ArrayList::new)));
     }
 
     public static User of(UserDTO dto) {
@@ -141,7 +145,10 @@ public class User {
         user.setDateOfBirth(dto.dateOfBirth());
         user.setCreated(dto.created());
         user.setChanged(dto.changed());
-        user.setRoles(dto.roles().stream().map(UserRole::of).toList());
+        List<UserRole> roles = dto.roles().stream()
+                .map(UserRole::of)
+                .collect(Collectors.toCollection(ArrayList::new));
+        user.setRoles(roles);
         return user;
     }
 }

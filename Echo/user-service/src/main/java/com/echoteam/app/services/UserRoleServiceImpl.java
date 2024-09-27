@@ -7,6 +7,7 @@ import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,12 +19,15 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     private final UserRoleRepository userRoleRepository;
 
+
+    @Transactional
     @Override
     public List<UserRoleDTO> getAll() {
         List<UserRole> roles = userRoleRepository.findAll();
         return roles.stream().map(UserRole::toDTO).toList();
     }
 
+    @Transactional
     @Override
     public UserRoleDTO findRoleById(Short id) {
         Optional<UserRole> role = userRoleRepository.findById(id);
@@ -34,6 +38,7 @@ public class UserRoleServiceImpl implements UserRoleService{
         }
     }
 
+    @Transactional
     @Override
     public UserRoleDTO createUserRole(UserRoleDTO dto) throws ParameterIsNotValidException {
         if (dto.id() != null) {
@@ -42,20 +47,27 @@ public class UserRoleServiceImpl implements UserRoleService{
         return userRoleRepository.save(UserRole.of(dto)).toDTO();
     }
 
+    @Transactional
     @Override
     public UserRoleDTO updateUserRole(UserRoleDTO dto) {
         Optional<UserRole> userRoleOptional = userRoleRepository.findById(dto.id());
         UserRole userRoleDB = userRoleOptional
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Role with id:%d not found", dto.id())));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Role with id %d not found", dto.id())));
         userRoleDB.acceptChanges(UserRole.of(dto));
         return userRoleDB.toDTO();
     }
 
+    @Transactional
     @Override
     public void deleteById(Short id) {
+        boolean exists = userRoleRepository.existsById(id);
+        if (!exists) {
+            throw new EntityNotFoundException(String.format("Role with id %d not found.", id));
+        }
         userRoleRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public List<UserRoleDTO> getUserRolesByIdIn(Collection<Short> id) {
         List<UserRole> roles = userRoleRepository.getUserRolesByIdIn(id);
@@ -63,4 +75,5 @@ public class UserRoleServiceImpl implements UserRoleService{
                 .map(UserRole::toDTO)
                 .toList();
     }
+
 }

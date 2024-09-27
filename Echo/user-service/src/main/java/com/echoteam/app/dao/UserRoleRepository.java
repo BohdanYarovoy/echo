@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Short> {
 
-    public List<UserRole> getUserRolesByIdIn(Collection<Short> id);
+    List<UserRole> getUserRolesByIdIn(Collection<Short> id);
 
 }

@@ -1,6 +1,7 @@
 package com.echoteam.app.exceptions;
 
-public class UniqueRecordAlreadyExistsException extends Exception{
+public class UniqueRecordAlreadyExistsException extends RuntimeException{
+
     public UniqueRecordAlreadyExistsException() {
     }
 
