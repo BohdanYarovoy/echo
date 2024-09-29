@@ -39,6 +39,9 @@ function toggleEdit() {
     isEditing = !isEditing;
 }
 
+
+
+
 function saveChanges() {
     const description = document.querySelector('.description');
     const newDescription = description.textContent;
