@@ -25,6 +25,7 @@ body {
 }
 
 .user-info-container {
+    margin-top: 1%;
     position: fixed;
     left: 15%;
     display: flex;
@@ -75,9 +76,11 @@ body {
 
 
 .edit-button {
-    display: block;
-    align-self: center;
-    margin-top: 140px;
+    margin-top: 5%;
+    display: flex; /* Зміна на flex */
+    justify-content: center; /* Горизонтальне вирівнювання по центру */
+    align-items: center; /* Вертикальне вирівнювання по центру */
+    width: 320px;
     padding: 16px 134px;
     background-color: var(--color-brand);
     color: var(--color-secondary-light);
@@ -86,6 +89,35 @@ body {
     border-radius: 20px;
     cursor: pointer;
     transition: color 0.3s, background-color 0.3s;
+}
+
+.highlight {
+    padding: 3px;
+    border: 2px solid rgba(54, 165, 184, 0.233); /* Товщина 2px, тип solid, колір прозорий */
+
+    background-color: rgba(175, 69, 69, 0); /* Напівпрозорий фон */
+}
+
+
+.save-button{
+    margin-top: 20%;
+    display: block;
+    align-items: center;
+    width: 320px;
+    padding: 16px 134px;
+    background-color: var(--color-brand);
+    color: var(--color-secondary-light);
+    font-size: 26px;
+    border: 1px solid var(--color-brand);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.save-button:hover{
+    color: var(--color-secondary-dark);
+    background-color: transparent;
+    border: 2px solid var(--color-secondary-dark);
 }
 
 .edit-button:hover {
@@ -232,3 +264,63 @@ body {
 .user-action-button img {
     margin-right: 6px;
 }
+
+
+
+
+
+
+
+
+/*    fffdfd fdf                              */
+
+
+.like-button .heart-icon {
+    height: 100px;
+    width: 100px;
+    background: url("../images/heart.png");
+    background-position: left;
+    cursor: pointer;
+    position: absolute;
+  }
+  
+  .like-button .heart-icon.liked {
+    animation: like-anim 0.7s steps(28) forwards;
+  }
+  
+  @keyframes like-anim {
+    to {
+      background-position: right;
+    }
+  }
+  
+  .like-button .heart-bg {
+    background: rgba(255, 192, 200, 0);
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 100ms ease;
+  }
+  
+  .like-button .heart-bg:hover {
+    background: rgba(255, 192, 200, 0.7);
+  }
+  
+  .like-button {
+    display: flex;
+    align-items: center;
+  }
+  
+  .like-button .likes-amount {
+    font-size: 20px;
+    font-family: "Roboto", sans-serif;
+    color: #888;
+    font-weight: 900;
+    margin-left: 6px;
+  }
+
+
+
