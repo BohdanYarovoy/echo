@@ -27,6 +27,11 @@
 }
 
 .close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
     position: absolute;
     top: 15px;
     right: 20px;
@@ -34,11 +39,16 @@
     color: #ffffff;
     cursor: pointer;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color 0.4s, background-color 0.4s, transform 0.4s;
 }
 
 .close-btn:hover {
-    color: #ff6b6b; /* Зміна кольору при наведенні */
+    background-color: white;
+    border-radius: 50%;
+    color: #004164 !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px white;
+    /* Зміна кольору при наведенні */
 }
 
 
