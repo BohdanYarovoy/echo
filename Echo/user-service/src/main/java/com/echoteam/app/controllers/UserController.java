@@ -1,10 +1,10 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.User;
-import com.echoteam.app.entities.dto.entityDTO.CreatedUser;
 import com.echoteam.app.entities.dto.entityDTO.UserDTO;
+import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUser;
+import com.echoteam.app.entities.dto.entityDTO.created.CreatedUser;
 import com.echoteam.app.services.UserService;
-import com.echoteam.app.services.validation.ValidationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 
 import static com.echoteam.app.entities.dto.mappers.UserMapper.INSTANCE;
@@ -25,32 +24,29 @@ public class UserController {
     @Value("${application.endpoint.user}")
     public String userUri;
     private final UserService userService;
-    private final ValidationService validationService;
 
     @GetMapping
     public ResponseEntity<?> getUsers() {
-        List<User> users = userService.getAll();
-        List<UserDTO> usersDTOs = INSTANCE.toDTOs(users);
-        UserDTO.removeAuth(usersDTOs);
+        var usersDTOs = INSTANCE.toDTOs(userService.getAll());
+        usersDTOs.forEach(UserDTO::doRoutine);
         return ResponseEntity.ok(usersDTOs);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
-        User user = userService.getById(id);
-        UserDTO dto = INSTANCE.toDTOFromUser(user);
-        dto.hidePassword();
+        var dto = INSTANCE.toDTOFromUser(userService.getById(id));
+        dto.doRoutine();
         return ResponseEntity.ok(dto);
     }
 
+
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody CreatedUser user,
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreatedUser user,
                                         UriComponentsBuilder uriBuilder) {
-        validationService.isValid(user);
-        UserDTO userDTO = INSTANCE.toDTOFromCreatedUser(user);
-        User createdUser = userService.createUser(userDTO);
-        UserDTO createdUserDTO = INSTANCE.toDTOFromUser(createdUser);
-        createdUserDTO.hidePassword();
+        var createdUser = userService.createUser(INSTANCE.toDTOFromCreatedUser(user));
+        var createdUserDTO = INSTANCE.toDTOFromUser(createdUser);
+        createdUserDTO.doRoutine();
 
         URI location = uriBuilder
                 .replacePath(userUri + "/{id}")
@@ -61,12 +57,13 @@ public class UserController {
                 .body(createdUserDTO);
     }
 
+
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO user,
+    public ResponseEntity<?> updateUser(@Valid @RequestBody ChangedUser changedUser,
                                         UriComponentsBuilder uriBuilder) {
-        User updatedUser = userService.updateUser(user);
-        UserDTO updatedUserDTO = INSTANCE.toDTOFromUser(updatedUser);
-        updatedUserDTO.hidePassword();
+        var user = userService.updateUser(INSTANCE.toDTOFromChangedUser(changedUser));
+        var updatedUserDTO = INSTANCE.toDTOFromUser(user);
+        updatedUserDTO.doRoutine();
 
         URI location = uriBuilder
                 .replacePath(userUri + "/{id}")
@@ -76,6 +73,7 @@ public class UserController {
                 .location(location)
                 .body(updatedUserDTO);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {

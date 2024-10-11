@@ -1,10 +1,9 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.UserDetail;
-import com.echoteam.app.entities.dto.entityDTO.CreatedDetail;
-import com.echoteam.app.entities.dto.entityDTO.UserDetailDTO;
+import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUserDetail;
+import com.echoteam.app.entities.dto.entityDTO.created.CreatedDetail;
 import com.echoteam.app.services.UserDetailService;
-import com.echoteam.app.services.validation.ValidationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 import static com.echoteam.app.entities.dto.mappers.UserDetailMapper.INSTANCE;
 
@@ -24,29 +22,27 @@ public class UserDetailController {
     @Value("${application.endpoint.detail}")
     public String detailUri;
     private final UserDetailService userDetailService;
-    private final ValidationService validationService;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        List<UserDetail> details = userDetailService.getAll();
-        List<UserDetailDTO> detailsDTOs = INSTANCE.toDTOsFromUserDetails(details);
+        var details = userDetailService.getAll();
+        var detailsDTOs = INSTANCE.toDTOsFromUserDetails(details);
         return ResponseEntity.ok(detailsDTOs);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        UserDetail detail = userDetailService.getById(id);
-        UserDetailDTO detailDTO = INSTANCE.toDTOFromUserDetail(detail);
+        var detail = userDetailService.getById(id);
+        var detailDTO = INSTANCE.toDTOFromUserDetail(detail);
         return ResponseEntity.ok(detailDTO);
     }
 
     @PostMapping
-    public ResponseEntity<?> createDetail(@RequestBody CreatedDetail userDetail,
+    public ResponseEntity<?> createDetail(@Valid @RequestBody CreatedDetail createdDetail,
                                           UriComponentsBuilder uriBuilder) {
-        validationService.isValid(userDetail);
-        UserDetailDTO userDetailDTO = INSTANCE.toDTOFromCreatedDetail(userDetail);
-        UserDetail detail = userDetailService.create(userDetailDTO);
-        UserDetailDTO detailDTO = INSTANCE.toDTOFromUserDetail(detail);
+        var createdDetailDTO = INSTANCE.toDTOFromCreatedDetail(createdDetail);
+        var detail = userDetailService.create(createdDetailDTO);
+        var detailDTO = INSTANCE.toDTOFromUserDetail(detail);
 
         URI location = uriBuilder.replacePath(detailUri + "/{id}")
                 .buildAndExpand(detailDTO.getId())
@@ -57,10 +53,11 @@ public class UserDetailController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateDetail(@RequestBody UserDetailDTO userDetailDTO,
+    public ResponseEntity<?> updateDetail(@Valid @RequestBody ChangedUserDetail changedUserDetail,
                                           UriComponentsBuilder uriBuilder) {
-        UserDetail detail = userDetailService.update(userDetailDTO);
-        UserDetailDTO detailDTO = INSTANCE.toDTOFromUserDetail(detail);
+        var changedDetailDTO = INSTANCE.toDTOFromChangedDetail(changedUserDetail);
+        var detail = userDetailService.update(changedDetailDTO);
+        var detailDTO = INSTANCE.toDTOFromUserDetail(detail);
 
         URI location = uriBuilder.replacePath(detailUri + "/{id}")
                 .buildAndExpand(detailDTO.getId()).toUri();

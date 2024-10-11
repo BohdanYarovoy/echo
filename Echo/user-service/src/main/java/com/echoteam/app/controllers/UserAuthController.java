@@ -1,10 +1,10 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.UserAuth;
-import com.echoteam.app.entities.dto.entityDTO.CreatedAuth;
 import com.echoteam.app.entities.dto.entityDTO.UserAuthDTO;
+import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUserAuth;
+import com.echoteam.app.entities.dto.entityDTO.created.CreatedAuth;
 import com.echoteam.app.services.UserAuthService;
-import com.echoteam.app.services.validation.ValidationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,29 +25,27 @@ public class UserAuthController {
     @Value("${application.endpoint.auth}")
     public String authUri;
     private final UserAuthService authService;
-    private final ValidationService validationService;
 
     @GetMapping
     public ResponseEntity<List<UserAuthDTO>> getAll() {
-        List<UserAuth> auths = authService.getAll();
-        List<UserAuthDTO> authDTOs = INSTANCE.toDTOsFromAuths(auths);
+        var auths = authService.getAll();
+        var authDTOs = INSTANCE.toDTOsFromAuths(auths);
         return ResponseEntity.ok(authDTOs);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserAuthDTO> getById(@PathVariable("id")Long id) {
-        UserAuth auth = authService.getById(id);
-        UserAuthDTO authDTO = INSTANCE.toDTOFromUserAuth(auth);
+        var auth = authService.getById(id);
+        var authDTO = INSTANCE.toDTOFromUserAuth(auth);
         return ResponseEntity.ok(authDTO);
     }
 
     @PostMapping
-    public ResponseEntity<UserAuthDTO> createAuth(@RequestBody CreatedAuth createdAuth,
+    public ResponseEntity<UserAuthDTO> createAuth(@Valid @RequestBody CreatedAuth createdAuth,
                                                   UriComponentsBuilder uriBuilder) {
-        validationService.isValid(createdAuth);
-        UserAuthDTO createdAuthDTO = INSTANCE.toDTOFromCreatedAuth(createdAuth);
-        UserAuth savedAuth = authService.create(createdAuthDTO);
-        UserAuthDTO authDTO = INSTANCE.toDTOFromUserAuth(savedAuth);
+        var createdAuthDTO = INSTANCE.toDTOFromCreatedAuth(createdAuth);
+        var savedAuth = authService.create(createdAuthDTO);
+        var authDTO = INSTANCE.toDTOFromUserAuth(savedAuth);
 
         URI uri = uriBuilder.replacePath(authUri + "/{id}")
                 .buildAndExpand("id", authDTO.getId())
@@ -58,10 +56,12 @@ public class UserAuthController {
     }
 
     @PutMapping
-    public ResponseEntity<UserAuthDTO> updateAuth(@RequestBody UserAuthDTO authDTO,
+    public ResponseEntity<UserAuthDTO> updateAuth(@Valid @RequestBody ChangedUserAuth changedUserAuth,
                                                   UriComponentsBuilder uriBuilder) {
-        UserAuth updatedAuth = authService.update(authDTO);
-        UserAuthDTO updatedAuthDTO = INSTANCE.toDTOFromUserAuth(updatedAuth);
+        var changedAuthDTO = INSTANCE.toDTOFromChangedAuth(changedUserAuth);
+        var updatedAuth = authService.update(changedAuthDTO);
+        var updatedAuthDTO = INSTANCE.toDTOFromUserAuth(updatedAuth);
+
         URI uri = uriBuilder.replacePath(authUri + "/{id}")
                 .buildAndExpand("id", updatedAuthDTO.getId())
                 .toUri();

@@ -1,4 +1,4 @@
-package com.echoteam.app.entities.dto.entityDTO;
+package com.echoteam.app.entities.dto.entityDTO.created;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -17,7 +17,7 @@ public class CreatedDetail {
         @NotNull
         @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Invalid phone number")
         private String phone;
-        @NotNull
         @Past
+        @NotNull(message = "Date of birth is required")
         private LocalDate dateOfBirth;
 }

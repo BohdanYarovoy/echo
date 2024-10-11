@@ -1,18 +1,15 @@
 package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserAuthRepository;
-import com.echoteam.app.entities.User;
 import com.echoteam.app.entities.UserAuth;
 import com.echoteam.app.entities.dto.entityDTO.UserAuthDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
-import com.echoteam.app.utils.customChanger.Changer;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.echoteam.app.entities.dto.mappers.UserAuthMapper.INSTANCE;
 
@@ -21,7 +18,6 @@ import static com.echoteam.app.entities.dto.mappers.UserAuthMapper.INSTANCE;
 public class UserAuthServiceImpl implements UserAuthService {
     private final UserAuthRepository authRepository;
     private final UserService userService;
-    private final Changer changer;
 
     @Transactional
     @Override
@@ -35,19 +31,20 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (id == null)
             throw new ParameterIsNotValidException("There is need id for auth.");
 
-        Optional<UserAuth> authOptional = authRepository.findById(id);
-        return authOptional.orElseThrow(() -> new EntityNotFoundException(String.format("Auth with id %d not found.", id)));
+        var authOptional = authRepository.findById(id);
+        return authOptional.orElseThrow(() -> new EntityNotFoundException(
+                String.format("Auth with id %d not found.", id)
+        ));
     }
 
     @Transactional
     @Override
     public UserAuth create(UserAuthDTO createdAuth) {
-        System.out.println(createdAuth);
         if (createdAuth.getId() != null)
             throw new ParameterIsNotValidException("There is no need auth with id.");
 
-        User user = userService.getById(createdAuth.getUserId());
-        UserAuth userAuth = INSTANCE.toUserAuth(createdAuth);
+        var user = userService.getById(createdAuth.getUserId());
+        var userAuth = INSTANCE.toUserAuth(createdAuth);
         userAuth.setUser(user);
         user.setUserAuth(userAuth);
         return authRepository.save(userAuth);
@@ -61,10 +58,8 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (updatedAuth.getUserId() != null)
             throw new ParameterIsNotValidException("There is no need auth with user id.");
 
-        UserAuth existingAuth = getById(updatedAuth.getId());
-        UserAuth updates = INSTANCE.toUserAuth(updatedAuth);
-        changer.changeUserAuth(existingAuth, updates);
-        return authRepository.save(existingAuth);
+        var auth = INSTANCE.toUserAuth(updatedAuth);
+        return authRepository.save(auth);
     }
 
     @Transactional

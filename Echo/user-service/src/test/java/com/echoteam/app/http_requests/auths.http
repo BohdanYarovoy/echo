@@ -11,7 +11,7 @@ POST localhost:8081/api/v1/users/auths
 Content-Type: application/json
 
 {
-  "userId": 5,
+  "userId": 6,
   "email": "bogdan.yarovoy.01@example.com",
   "password": "12345678",
   "created": "2024-10-07T13:57:47.537+00:00",

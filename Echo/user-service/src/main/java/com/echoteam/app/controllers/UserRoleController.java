@@ -1,8 +1,9 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
+import com.echoteam.app.entities.dto.entityDTO.changed.ChangedRole;
+import com.echoteam.app.entities.dto.entityDTO.created.CreatedRole;
 import com.echoteam.app.services.UserRoleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,30 +27,31 @@ public class UserRoleController {
 
     @GetMapping
     public ResponseEntity<?> getAllUserRoles() {
-        List<UserRole> userRoles = userRoleService.getAll();
-        List<UserRoleDTO> userRolesDTOs = INSTANCE.toDTOs(userRoles);
+        var userRoles = userRoleService.getAll();
+        var userRolesDTOs = INSTANCE.toDTOs(userRoles);
         return ResponseEntity.ok(userRolesDTOs);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserRoleByID(@PathVariable("id") Short id) {
-        UserRole role = userRoleService.findRoleById(id);
-        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+        var role = userRoleService.findRoleById(id);
+        var roleDTO = INSTANCE.toDTO(role);
         return ResponseEntity.ok(roleDTO);
     }
 
     @GetMapping("/selectively")
     public ResponseEntity<?> getUserRoleByIds(@RequestParam(name = "ids") List<Short> ids) {
-        List<UserRole> role = userRoleService.getUserRolesByIdIn(ids);
-        List<UserRoleDTO> roles = INSTANCE.toDTOs(role);
+        var role = userRoleService.getUserRolesByIdIn(ids);
+        var roles = INSTANCE.toDTOs(role);
         return ResponseEntity.ok(roles);
     }
 
     @PostMapping
-    public ResponseEntity<?> createUserRole(@RequestBody UserRoleDTO userRoleDTO,
+    public ResponseEntity<?> createUserRole(@Valid @RequestBody CreatedRole createdRole,
                                             UriComponentsBuilder uriBuilder) {
-        UserRole role = userRoleService.createUserRole(userRoleDTO);
-        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+        var userRoleDTO = INSTANCE.toDTOFromCreatedRole(createdRole);
+        var role = userRoleService.createUserRole(userRoleDTO);
+        var roleDTO = INSTANCE.toDTO(role);
 
         URI location = uriBuilder
                 .replacePath(roleUri + "/{id}")
@@ -61,10 +63,11 @@ public class UserRoleController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUserRole(@RequestBody UserRoleDTO userRoleDTO,
+    public ResponseEntity<?> updateUserRole(@Valid @RequestBody ChangedRole changedRole,
                                             UriComponentsBuilder uriBuilder) {
-        UserRole role = userRoleService.updateUserRole(userRoleDTO);
-        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+        var userRoleDTO = INSTANCE.toDTOFromChangedRole(changedRole);
+        var role = userRoleService.updateUserRole(userRoleDTO);
+        var roleDTO = INSTANCE.toDTO(role);
 
         URI location = uriBuilder
                 .replacePath(roleUri + "/{id}")

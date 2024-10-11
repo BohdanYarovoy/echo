@@ -1,4 +1,4 @@
-package com.echoteam.app.entities.dto.entityDTO;
+package com.echoteam.app.entities.dto.entityDTO.created;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class CreatedAuth {
     private Long userId;
     @NotNull
+    @Size(max = 100, message = "Email length shouldn`t be greater than 100 characters")
     @Email(message = "Incorrect email address")
     private String email;
     @NotNull

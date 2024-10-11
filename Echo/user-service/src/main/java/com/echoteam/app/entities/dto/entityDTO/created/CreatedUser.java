@@ -1,5 +1,7 @@
-package com.echoteam.app.entities.dto.entityDTO;
+package com.echoteam.app.entities.dto.entityDTO.created;
 
+import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,11 +15,11 @@ import java.util.List;
 @Data
 public class CreatedUser {
     @NotNull(message = "Nickname can`t be empty")
-    @Size(max = 50, message = "Nickname size shouldn`t be greater than 50 characters")
+    @Size(min = 4, max = 50, message = "Nickname cannot be greater than 50 and less than 4 characters")
     private String nickname;
-    @ForValidation
+    @Valid
     private CreatedDetail userDetail;
-    @ForValidation
+    @Valid
     private CreatedAuth userAuth;
     private List<UserRoleDTO> roles;
 

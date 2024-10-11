@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,15 +22,23 @@ public class UserDTO {
     private UserAuthDTO userAuth;
     private List<UserRoleDTO> roles;
 
+
+    public void doRoutine() {
+        hidePassword();
+        makeReference();
+    }
+
     public void hidePassword() {
         if (this.userAuth != null)
             this.userAuth.hidePassword();
     }
 
-    public static List<UserDTO> removeAuth(List<UserDTO> users) {
-        return users.stream()
-                .peek(UserDTO::hidePassword)
-                .toList();
+    public void makeReference() {
+        if (Objects.nonNull(this.userDetail))
+            this.userDetail.setUserId(this.id);
+
+        if (Objects.nonNull(this.userAuth))
+            this.userAuth.setUserId(this.id);
     }
 
 }

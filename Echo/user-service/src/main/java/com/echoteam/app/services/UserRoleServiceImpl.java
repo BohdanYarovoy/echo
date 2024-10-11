@@ -11,22 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static com.echoteam.app.entities.dto.mappers.UserRoleMapper.INSTANCE;
 
 @RequiredArgsConstructor
 @Service
 public class UserRoleServiceImpl implements UserRoleService{
-
     private final UserRoleRepository userRoleRepository;
-
 
     @Transactional
     @Override
     public List<UserRole> getAll() {
-        List<UserRole> roles = userRoleRepository.findAll();
-        return roles;
+        return userRoleRepository.findAll();
     }
 
     @Transactional
@@ -35,31 +31,27 @@ public class UserRoleServiceImpl implements UserRoleService{
         if (id == null)
             throw new ParameterIsNotValidException("There is need id for role.");
 
-        Optional<UserRole> optionalUserRole = userRoleRepository.findById(id);
-        if (optionalUserRole.isPresent()) {
-            return optionalUserRole.get();
-        } else {
+        var optionalUserRole = userRoleRepository.findById(id);
+        if (optionalUserRole.isEmpty())
             throw new EntityNotFoundException(String.format("Role with id %d not found.", id));
-        }
+        return optionalUserRole.get();
     }
 
     @Transactional
     @Override
     public UserRole createUserRole(UserRoleDTO dto) throws ParameterIsNotValidException {
-        if (dto.getId() != null) {
+        if (dto.getId() != null)
             throw new ParameterIsNotValidException("There is no need role with id.");
-        }
-        UserRole role = INSTANCE.toUserRole(dto);
-        role = userRoleRepository.save(role);
-        return role;
+
+        var role = INSTANCE.toUserRole(dto);
+        return userRoleRepository.save(role);
     }
 
     @Transactional
     @Override
     public UserRole updateUserRole(UserRoleDTO dto) {
-        UserRole role = INSTANCE.toUserRole(dto);
-        role = userRoleRepository.save(role);
-        return role;
+        var role = INSTANCE.toUserRole(dto);
+        return userRoleRepository.save(role);
     }
 
     @Transactional
@@ -75,8 +67,7 @@ public class UserRoleServiceImpl implements UserRoleService{
     @Transactional
     @Override
     public List<UserRole> getUserRolesByIdIn(Collection<Short> id) {
-        List<UserRole> roles = userRoleRepository.getUserRolesByIdIn(id);
-        return roles;
+        return userRoleRepository.getUserRolesByIdIn(id);
     }
 
 }

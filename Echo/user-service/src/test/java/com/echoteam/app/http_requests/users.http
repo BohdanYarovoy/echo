@@ -5,7 +5,7 @@ Accept: application/json
 ###
 ###
 
-GET http://localhost:8081/api/v1/users/6
+GET http://localhost:8081/api/v1/users/1
 Accept: application/json
 
 ###
@@ -48,35 +48,38 @@ Content-Type: application/json
 
 {
   "id": 6,
-  "nickname": "",
+  "nickname": "mellanholica",
   "avatar": null,
-  "created": "2023-10-02T21:48:43.448+00:00",
-  "changed": "2023-10-02T21:48:43.448+00:00",
+  "created": "2024-10-11T03:34:15.010+00:00",
+  "changed": null,
   "isDeleted": false,
   "userDetail": {
-    "id": 4,
-    "userId": null,
-    "firstname": null,
-    "lastname": null,
-    "patronymic": null,
-    "sex": null,
-    "dateOfBirth": "2001-11-07",
-    "phone": "0971773437",
-    "about": null
+    "id": 14,
+    "userId": 6,
+    "firstname": "Homer",
+    "lastname": "Smith",
+    "patronymic": "Rogan",
+    "sex": "FEMALE",
+    "dateOfBirth": "1993-01-21",
+    "phone": "+38093442",
+    "about": "I love programming.",
+    "created": "2024-10-11T06:32:51.079+00:00",
+    "changed": null,
+    "isDeleted": false
   },
   "userAuth": {
-    "id": 4,
+    "id": 7,
+    "userId": 6,
     "email": "bogdan.yarovoy.01@example.com",
-    "password": "11112222"
+    "password": "31452",
+    "created": "2024-10-11T06:34:34.376+00:00",
+    "changed": null,
+    "isDeleted": false
   },
   "roles": [
     {
       "id": 2,
-      "name": "USERSSSS"
-    },
-    {
-      "id": 3,
-      "name": "MOTHERFUCKER"
+      "name": "ADMIN"
     }
   ]
 }
