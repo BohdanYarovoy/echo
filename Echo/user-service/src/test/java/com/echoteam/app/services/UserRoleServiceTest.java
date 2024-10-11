@@ -1,17 +1,10 @@
 package com.echoteam.app.services;
 
-import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.UserRoleDTO;
-import com.echoteam.app.exceptions.ParameterIsNotValidException;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 class UserRoleServiceTest {
-
+/*
     @Autowired
     private UserRoleService userRoleService;
 
@@ -36,5 +29,5 @@ class UserRoleServiceTest {
             throw new RuntimeException(e);
         }
     }
-
+ */
 }

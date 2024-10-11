@@ -2,13 +2,12 @@ package com.echoteam.app.utils;
 
 import com.echoteam.app.entities.User;
 import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class PerformUser {
-
+/*
     public static UserDTO mergeUserDTO(UserDTO defaultUser, UserDTO change) {
         User user = User.of(defaultUser);
         
@@ -43,4 +42,6 @@ public class PerformUser {
         return user.toDTO();
     }
 
+
+ */
 }

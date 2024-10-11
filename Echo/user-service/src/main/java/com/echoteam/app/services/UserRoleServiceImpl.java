@@ -2,7 +2,7 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserRoleRepository;
 import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.UserRoleDTO;
+import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.echoteam.app.entities.dto.mappers.UserRoleMapper.INSTANCE;
+
 @RequiredArgsConstructor
 @Service
 public class UserRoleServiceImpl implements UserRoleService{
@@ -22,17 +24,20 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     @Transactional
     @Override
-    public List<UserRoleDTO> getAll() {
+    public List<UserRole> getAll() {
         List<UserRole> roles = userRoleRepository.findAll();
-        return roles.stream().map(UserRole::toDTO).toList();
+        return roles;
     }
 
     @Transactional
     @Override
-    public UserRoleDTO findRoleById(Short id) {
-        Optional<UserRole> role = userRoleRepository.findById(id);
-        if (role.isPresent()) {
-            return role.get().toDTO();
+    public UserRole findRoleById(Short id) {
+        if (id == null)
+            throw new ParameterIsNotValidException("There is need id for role.");
+
+        Optional<UserRole> optionalUserRole = userRoleRepository.findById(id);
+        if (optionalUserRole.isPresent()) {
+            return optionalUserRole.get();
         } else {
             throw new EntityNotFoundException(String.format("Role with id %d not found.", id));
         }
@@ -40,21 +45,21 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     @Transactional
     @Override
-    public UserRoleDTO createUserRole(UserRoleDTO dto) throws ParameterIsNotValidException {
-        if (dto.id() != null) {
+    public UserRole createUserRole(UserRoleDTO dto) throws ParameterIsNotValidException {
+        if (dto.getId() != null) {
             throw new ParameterIsNotValidException("There is no need role with id.");
         }
-        return userRoleRepository.save(UserRole.of(dto)).toDTO();
+        UserRole role = INSTANCE.toUserRole(dto);
+        role = userRoleRepository.save(role);
+        return role;
     }
 
     @Transactional
     @Override
-    public UserRoleDTO updateUserRole(UserRoleDTO dto) {
-        Optional<UserRole> userRoleOptional = userRoleRepository.findById(dto.id());
-        UserRole userRoleDB = userRoleOptional
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Role with id %d not found", dto.id())));
-        userRoleDB.acceptChanges(UserRole.of(dto));
-        return userRoleDB.toDTO();
+    public UserRole updateUserRole(UserRoleDTO dto) {
+        UserRole role = INSTANCE.toUserRole(dto);
+        role = userRoleRepository.save(role);
+        return role;
     }
 
     @Transactional
@@ -69,11 +74,18 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     @Transactional
     @Override
-    public List<UserRoleDTO> getUserRolesByIdIn(Collection<Short> id) {
+    public List<UserRole> getUserRolesByIdIn(Collection<Short> id) {
         List<UserRole> roles = userRoleRepository.getUserRolesByIdIn(id);
-        return roles.stream()
-                .map(UserRole::toDTO)
-                .toList();
+        return roles;
     }
 
 }
+
+
+
+
+
+
+
+
+

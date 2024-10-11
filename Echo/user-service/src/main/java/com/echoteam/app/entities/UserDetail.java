@@ -2,32 +2,49 @@ package com.echoteam.app.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "user_details")
+public class UserDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_detail_id")
     private Long id;
 
-    @Column(name = "nickname", unique = true, nullable = false)
-    private String nickname;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, unique = true)
+    private User user;
 
-    @Column(name = "avatar", columnDefinition = "BYTEA")
-    private byte[] avatar;
+    @Column(name = "first_name")
+    private String firstname;
+
+    @Column(name = "last_name")
+    private String lastname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
+
+    @Column(name = "sex")
+    private Sex sex;
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "phone", unique = true, nullable = false)
+    private String phone;
+
+    @Column(name = "about")
+    private String about;
 
     @Column(name = "created", updatable = false)
     private Timestamp created;
@@ -37,20 +54,6 @@ public class User {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private UserDetail userDetail;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private UserAuth userAuth;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<UserRole> roles;
 
     @PrePersist
     protected void onCreate() {
@@ -62,5 +65,4 @@ public class User {
     protected void onUpdate() {
         this.changed = Timestamp.valueOf(LocalDateTime.now());
     }
-
 }

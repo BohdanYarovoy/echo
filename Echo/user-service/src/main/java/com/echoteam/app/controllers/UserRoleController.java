@@ -1,8 +1,10 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.UserRoleDTO;
+import com.echoteam.app.entities.UserRole;
+import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
 import com.echoteam.app.services.UserRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,59 +14,65 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+import static com.echoteam.app.entities.dto.mappers.UserRoleMapper.INSTANCE;
+
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/user-roles")
+@RequestMapping("${application.endpoint.role}")
 public class UserRoleController {
-
-    public static final String USER_ROLE_URI = "/api/v1/user-roles";
+    @Value("${application.endpoint.role}")
+    public String roleUri;
     private final UserRoleService userRoleService;
-
-    // todo: поробити перевірки на null в усіх методах, бо у випадку відправлення null в not null поля,
-    // todo: сервер видає свою помилку а не bad-request як потрібно
 
     @GetMapping
     public ResponseEntity<?> getAllUserRoles() {
-        List<UserRoleDTO> userRoles = userRoleService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(userRoles);
+        List<UserRole> userRoles = userRoleService.getAll();
+        List<UserRoleDTO> userRolesDTOs = INSTANCE.toDTOs(userRoles);
+        return ResponseEntity.ok(userRolesDTOs);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserRoleByID(@PathVariable("id") Short id) {
-        UserRoleDTO roleById = userRoleService.findRoleById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(roleById);
+        UserRole role = userRoleService.findRoleById(id);
+        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+        return ResponseEntity.ok(roleDTO);
     }
 
     @GetMapping("/selectively")
     public ResponseEntity<?> getUserRoleByIds(@RequestParam(name = "ids") List<Short> ids) {
-        List<UserRoleDTO> userRolesByIdIn = userRoleService.getUserRolesByIdIn(ids);
-        return ResponseEntity.status(HttpStatus.OK).body(userRolesByIdIn);
+        List<UserRole> role = userRoleService.getUserRolesByIdIn(ids);
+        List<UserRoleDTO> roles = INSTANCE.toDTOs(role);
+        return ResponseEntity.ok(roles);
     }
 
     @PostMapping
     public ResponseEntity<?> createUserRole(@RequestBody UserRoleDTO userRoleDTO,
                                             UriComponentsBuilder uriBuilder) {
-        UserRoleDTO createdUserRole = userRoleService.createUserRole(userRoleDTO);
+        UserRole role = userRoleService.createUserRole(userRoleDTO);
+        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+
         URI location = uriBuilder
-                .replacePath(USER_ROLE_URI + "/{id}")
-                .buildAndExpand(Map.of("id", createdUserRole.id()))
+                .replacePath(roleUri + "/{id}")
+                .buildAndExpand(Map.of("id", roleDTO.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(location)
-                .body(createdUserRole);
+                .body(roleDTO);
     }
 
     @PutMapping
     public ResponseEntity<?> updateUserRole(@RequestBody UserRoleDTO userRoleDTO,
                                             UriComponentsBuilder uriBuilder) {
-        UserRoleDTO updatedUserRole = userRoleService.updateUserRole(userRoleDTO);
+        UserRole role = userRoleService.updateUserRole(userRoleDTO);
+        UserRoleDTO roleDTO = INSTANCE.toDTO(role);
+
         URI location = uriBuilder
-                .replacePath(USER_ROLE_URI + "/{id}")
-                .buildAndExpand(Map.of("id", updatedUserRole.id()))
+                .replacePath(roleUri + "/{id}")
+                .buildAndExpand(Map.of("id", roleDTO.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.OK)
                 .location(location)
-                .body(updatedUserRole);
+                .body(roleDTO);
     }
 
     @DeleteMapping("/{id}")

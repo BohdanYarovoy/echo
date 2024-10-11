@@ -1,27 +1,55 @@
 DROP TABLE IF EXISTS users_roles;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user_auths;
+DROP TABLE IF EXISTS user_details;
 DROP TABLE IF EXISTS roles;
 
 CREATE TABLE users
 (
-    user_id       BIGSERIAL,
-    nickname      VARCHAR(50) UNIQUE  NOT NULL,
-    first_name    VARCHAR(50)         NOT NULL,
-    last_name     VARCHAR(50)         NOT NULL,
-    patronymic    VARCHAR(50),
-    sex           SMALLINT,
-    email         VARCHAR(100) UNIQUE NOT NULL,
-    password      VARCHAR(255)        NOT NULL,
-    date_of_birth DATE,
-    created       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    changed       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id    BIGSERIAL,
+    nickname   VARCHAR(50) NOT NULL UNIQUE,
+    avatar     BYTEA,
+    created    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changed    TIMESTAMP,
+    is_deleted BOOLEAN   DEFAULT FALSE,
     PRIMARY KEY (user_id)
+);
+
+CREATE TABLE user_details
+(
+    user_detail_id BIGSERIAL,
+    user_id        INTEGER UNIQUE,
+    first_name     VARCHAR(50),
+    last_name      VARCHAR(50),
+    patronymic     VARCHAR(50),
+    phone          VARCHAR(15) NOT NULL UNIQUE,
+    about          VARCHAR(100),
+    sex            SMALLINT,
+    date_of_birth  DATE        NOT NULL,
+    created        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changed        TIMESTAMP,
+    is_deleted     BOOLEAN   DEFAULT FALSE,
+    PRIMARY KEY (user_detail_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE user_auths
+(
+    user_auth_id BIGSERIAL,
+    user_id      INTEGER UNIQUE,
+    email        VARCHAR(100) NOT NULL UNIQUE,
+    password     VARCHAR(32) NOT NULL,
+    created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changed      TIMESTAMP,
+    is_deleted   BOOLEAN   DEFAULT FALSE,
+    PRIMARY KEY (user_auth_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE roles
 (
     role_id   SMALLSERIAL,
-    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_name VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (role_id)
 );
 

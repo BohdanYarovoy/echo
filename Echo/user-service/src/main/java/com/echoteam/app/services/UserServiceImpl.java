@@ -2,8 +2,11 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserRepository;
 import com.echoteam.app.entities.User;
-import com.echoteam.app.entities.dto.UserDTO;
+import com.echoteam.app.entities.UserAuth;
+import com.echoteam.app.entities.UserDetail;
+import com.echoteam.app.entities.dto.entityDTO.UserDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
+import com.echoteam.app.utils.customChanger.Changer;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,27 +15,30 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.echoteam.app.entities.dto.mappers.UserMapper.INSTANCE;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final Changer changer;
 
     @Transactional
     @Override
-    public List<UserDTO> getAll() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(User::toDTO)
-                .toList();
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Transactional
     @Override
-    public UserDTO getById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return user.get().toDTO();
+    public User getById(Long id) {
+        if (id == null)
+            throw new ParameterIsNotValidException("There is need id for user.");
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         } else {
             throw new EntityNotFoundException(String.format("User with id %d not found.", id));
         }
@@ -40,24 +46,22 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public UserDTO createUser(UserDTO userDto) {
-        if (userDto.id() != null) {
-            throw new ParameterIsNotValidException("There is no need user with id.");
-        }
-        return userRepository.save(User.of(userDto)).toDTO();
+    public User createUser(UserDTO userDto) {
+        if (userDto.getId() != null)
+            throw new ParameterIsNotValidException("There is no need id for user.");
+        User newUser = this.mapToUserWithRelations(userDto);
+        return userRepository.save(newUser);
     }
 
     @Transactional
     @Override
-    public UserDTO updateUser(UserDTO userDto) {
-        Optional<User> optionalUser = userRepository.findById(userDto.id());
-        if (optionalUser.isPresent()) {
-            User dbUser = optionalUser.get();
-            dbUser.acceptChanges(User.of(userDto));
-            return userRepository.save(dbUser).toDTO();
-        } else {
-            throw new EntityNotFoundException(String.format("User with id %d not found.", userDto.id()));
-        }
+    public User updateUser(UserDTO userDto) {
+        if (userDto.getId() == null)
+            throw new ParameterIsNotValidException("Id is required.");
+        User existingUser = getById(userDto.getId());
+        User changedUser = INSTANCE.toUserFromDTO(userDto);
+        changer.changeUser(existingUser, changedUser);
+        return userRepository.save(existingUser);
     }
 
     @Transactional
@@ -70,4 +74,20 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(id);
     }
 
+    private User mapToUserWithRelations(UserDTO userDTO) {
+        User user = INSTANCE.toUserFromDTO(userDTO);
+        if (user.getUserAuth() != null) {
+            UserAuth userAuth = user.getUserAuth();
+            userAuth.setUser(user);
+            user.setUserAuth(userAuth);
+        }
+
+        if (user.getUserDetail() != null) {
+            UserDetail userDetail = user.getUserDetail();
+            userDetail.setUser(user);
+            user.setUserDetail(userDetail);
+        }
+
+        return user;
+    }
 }

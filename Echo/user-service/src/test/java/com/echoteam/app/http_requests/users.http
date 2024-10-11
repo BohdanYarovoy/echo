@@ -1,0 +1,88 @@
+GET http://localhost:8081/api/v1/users
+Accept: application/json
+
+###
+###
+###
+
+GET http://localhost:8081/api/v1/users/6
+Accept: application/json
+
+###
+###
+###
+
+POST http://localhost:8081/api/v1/users
+Content-Type: application/json
+
+{
+  "nickname": "mellanholica",
+  "userDetail": {
+    "firstname": null,
+    "lastname": null,
+    "patronymic": null,
+    "sex": null,
+    "dateOfBirth": "2001-11-07",
+    "phone": "0971773438",
+    "about": null
+  },
+  "userAuth": {
+    "id": 4,
+    "email": "bogdan.yarovoy.01@example.com",
+    "password": "345465234543"
+  },
+  "roles": [
+    {
+      "id": 2,
+      "name": "USERSSSS"
+    }
+  ]
+}
+
+###
+###
+###
+
+PUT http://localhost:8081/api/v1/users
+Content-Type: application/json
+
+{
+  "id": 6,
+  "nickname": "",
+  "avatar": null,
+  "created": "2023-10-02T21:48:43.448+00:00",
+  "changed": "2023-10-02T21:48:43.448+00:00",
+  "isDeleted": false,
+  "userDetail": {
+    "id": 4,
+    "userId": null,
+    "firstname": null,
+    "lastname": null,
+    "patronymic": null,
+    "sex": null,
+    "dateOfBirth": "2001-11-07",
+    "phone": "0971773437",
+    "about": null
+  },
+  "userAuth": {
+    "id": 4,
+    "email": "bogdan.yarovoy.01@example.com",
+    "password": "11112222"
+  },
+  "roles": [
+    {
+      "id": 2,
+      "name": "USERSSSS"
+    },
+    {
+      "id": 3,
+      "name": "MOTHERFUCKER"
+    }
+  ]
+}
+
+###
+###
+###
+
+DELETE localhost:8081/api/v1/users/5

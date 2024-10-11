@@ -1,6 +1,7 @@
 package com.echoteam.app.services;
 
-import com.echoteam.app.entities.dto.UserRoleDTO;
+import com.echoteam.app.entities.UserRole;
+import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 
 import java.util.Collection;
@@ -8,15 +9,11 @@ import java.util.List;
 
 public interface UserRoleService {
 
-    List<UserRoleDTO> getAll();
-
-    UserRoleDTO findRoleById(Short id);
-
-    UserRoleDTO createUserRole(UserRoleDTO role) throws ParameterIsNotValidException;
-
-    UserRoleDTO updateUserRole(UserRoleDTO role);
-
+    List<UserRole> getAll();
+    UserRole findRoleById(Short id);
+    UserRole createUserRole(UserRoleDTO role) ;
+    UserRole updateUserRole(UserRoleDTO role);
     void deleteById(Short id);
+    List<UserRole> getUserRolesByIdIn(Collection<Short> id);
 
-    List<UserRoleDTO> getUserRolesByIdIn(Collection<Short> id);
 }

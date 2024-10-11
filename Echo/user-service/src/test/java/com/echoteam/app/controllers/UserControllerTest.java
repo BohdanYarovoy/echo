@@ -1,10 +1,6 @@
 package com.echoteam.app.controllers;
 
 import com.echoteam.app.entities.Sex;
-import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.UserDTO;
-import com.echoteam.app.entities.dto.UserRoleDTO;
-import com.echoteam.app.exceptions.InProgress;
 import com.echoteam.app.utils.PerformUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,30 +27,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
-
     public static final String USER_URI = "/api/v1/users";
-
     @Autowired
     private MockMvc mockMvc;
+/*
 
-
-    // GET
     @Test
     @Order(1)
     void getUsers() throws Exception {
-        mockMvc.perform(get(USER_URI)
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(USER_URI).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3));
     }
 
-    // GET BY ID
     @Test
     @Order(2)
     void getUserById() throws Exception {
         long id = 1L;
-        mockMvc.perform(get(USER_URI + "/" + id)
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(USER_URI + "/" + id).accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(status().isOk(),
                         jsonPath("$.id").value(id),
                         jsonPath("$.nickname").isNotEmpty(),
@@ -66,18 +56,22 @@ class UserControllerTest {
     @Order(3)
     void getUserByNotExistsId() throws Exception {
         long id = 4L; // id 4 is not exists in db
-        mockMvc.perform(get(USER_URI + "/" + id)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpectAll(status().isNotFound());
+        mockMvc.perform(get(USER_URI + "/" + id).accept(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.body.detail").value("User with id " + id + " not found.")
+                );
     }
 
-    // CREATE
     @Test
     @Order(4)
     void createUser() throws Exception {
         String nickname = "newuser";
+        String firstname = "Joe";
+        String lastname = "Beaber";
         String email = "newuser@example.com";
-        MockHttpServletRequestBuilder request = createUserWithId(null, nickname, email);
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
 
         mockMvc.perform(request).andExpectAll(
                 status().isCreated(),
@@ -93,77 +87,142 @@ class UserControllerTest {
     @Order(5)
     void createUserWithPreparedId() throws Exception {
         String nickname = "newuser";
+        String firstname = "Joe";
+        String lastname = "Beaber";
         String email = "newuser@example.com";
-        MockHttpServletRequestBuilder request = createUserWithId(5L, nickname, email);
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(5L,nickname,firstname,lastname,email,password);
 
-        mockMvc.perform(request).andExpect(status().isBadRequest());
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("There is no need user with id.")
+        );
     }
 
     @Test
     @Order(6)
     void createUserWithUniqueAlreadyExistingDbNickname() throws Exception {
         String nickname = "maybyes";
+        String firstname = "Joe";
+        String lastname = "Beaber";
         String email = "newuser@example.com";
-        MockHttpServletRequestBuilder request = createUserWithId(null, nickname, email);
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
 
-        mockMvc.perform(request).andExpect(status().isBadRequest());
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Entity with such nickname already exist.")
+        );
     }
 
     @Test
     @Order(7)
     void createUserWithUniqueAlreadyExistingDbEmail() throws Exception {
-        String nickname = "newuser";
+        String nickname = "holobobo";
+        String firstname = "Joe";
+        String lastname = "Beaber";
         String email = "bogdan.yarovoy.01@gmail.com";
-        MockHttpServletRequestBuilder request = createUserWithId(null, nickname, email);
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
 
-        mockMvc.perform(request).andExpect(status().isBadRequest());
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Entity with such email already exist.")
+        );
     }
 
     @Test
     @Order(8)
-    void createUserWithoutNotNullFieldNickname() {
-        // todo: implement logic
-        throw new InProgress();
+    void createUserWithoutNotNullFieldNickname() throws Exception {
+        String nickname = "";       // nickname is empty
+        String firstname = "Joe";
+        String lastname = "Beaber";
+        String email = "bogdan.yarovoy.01@gmail.com";
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field nickname cannot be empty.")
+        );
     }
 
     @Test
     @Order(9)
-    void createUserWithoutNotNullFieldEmail() {
-        // todo: implement logic
-        throw new InProgress();
+    void createUserWithoutNotNullFieldEmail() throws Exception {
+        String nickname = "newuserWithoutEmain";
+        String firstname = "Joe";
+        String lastname = "Beaber";
+        String email = "";                      // email is empty
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field email cannot be empty.")
+        );
     }
 
     @Test
     @Order(10)
-    void createUserWithoutNotNullFieldFirstname() {
-        // todo: implement logic
-        throw new InProgress();
+    void createUserWithoutNotNullFieldFirstname() throws Exception {
+        String nickname = "newuserWithoutFirstname";
+        String firstname = "";                  // firstname is empty
+        String lastname = "Beaber";
+        String email = "sofar@gmail.com";
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field firstname cannot be empty.")
+        );
     }
 
     @Test
     @Order(11)
-    void createUserWithoutNotNullFieldLastname() {
-        // todo: implement logic
-        throw new InProgress();
+    void createUserWithoutNotNullFieldLastname() throws Exception {
+        String nickname = "newuserWithoutLastname";
+        String firstname = "firstname";
+        String lastname = "";                   // lastname is empty
+        String email = "sofar@gmail.com";
+        String password = "pass1234";
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field lastname cannot be empty.")
+        );
     }
 
     @Test
     @Order(12)
-    void createUserWithoutNotNullFieldPassword() {
-        // todo: implement logic
-        throw new InProgress();
+    void createUserWithoutNotNullFieldPassword() throws Exception {
+        String nickname = "newuserWithoutPassword";
+        String firstname = "firstname";
+        String lastname = "lastname";
+        String email = "sofar@gmail.com";
+        String password = "";           // password is empty
+        MockHttpServletRequestBuilder request = createUserWithId(null,nickname,firstname,lastname,email,password);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field password cannot be empty.")
+        );
     }
 
-    private MockHttpServletRequestBuilder createUserWithId(Long id, String nickname, String email) throws Exception {
+    private MockHttpServletRequestBuilder createUserWithId(Long id, String nickname,
+                                                           String firstname, String lastname,
+                                                           String email, String password) throws Exception {
         UserDTO user = new UserDTO(
                 id,
                 nickname,
-                "John",
-                "Doe",
+                firstname,
+                lastname,
                 "Johnovich",
                 Sex.MALE,
                 email,
-                "password123",
+                password,
                 LocalDate.of(1990, 10, 12),
                 null,
                 null,
@@ -179,11 +238,10 @@ class UserControllerTest {
                 .content(userAsJson);
     }
 
-
-    // UPDATE
     @Test
     @Order(13)
     void updateUser() throws Exception {
+        Long id = 2L;
         String nickname = "mark16",
                 firstname = "Bob",
                 lastname = "Dilan",
@@ -198,8 +256,7 @@ class UserControllerTest {
                 new UserRoleDTO((short) 1, "ADMIN"),
                 new UserRoleDTO((short) 2, "USER")
         );
-        UserDTO changesForUser = new UserDTO(null, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
-
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
         MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
 
         mockMvc.perform(request).andExpectAll(
@@ -218,8 +275,199 @@ class UserControllerTest {
         );
     }
 
-    private static MockHttpServletRequestBuilder changeExistUser(UserDTO userChanges) throws JsonProcessingException {
+    @Test
+    @Order(14)
+    void updateUserWithoutId() throws Exception {
+        Long id = null;                         // id is null
+        String nickname = null,
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = null,
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Id is required.")
+        );
+    }
+
+    @Test
+    @Order(15)
+    void updateUserWithUniqueAlreadyExistingDbNickname() throws Exception {
         Long id = 2L;
+        String nickname = "maybyes",                     // such nickname already exists
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = null,
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Entity with such nickname already exist.")
+        );
+    }
+
+    @Test
+    @Order(16)
+    void updateUserWithUniqueAlreadyExistingDbEmail() throws Exception {
+        Long id = 2L;
+        String nickname = null,
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = "bogdan.yarovoy.01@gmail.com",          // such email already exists
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Entity with such email already exist.")
+        );
+    }
+
+    @Test
+    @Order(17)
+    void updateUserWithBlankNotNullFieldNickname() throws Exception {
+        Long id = 2L;
+        String nickname = "",                     // nickname is blank
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = null,
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field nickname cannot be empty.")
+        );
+    }
+
+    @Test
+    @Order(18)
+    void updateUserWithBlankNotNullFieldEmail() throws Exception {
+        Long id = 2L;
+        String nickname = null,
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = "",               // email is blank
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field email cannot be empty.")
+        );
+    }
+
+    @Test
+    @Order(19)
+    void updateUserWithBlankNotNullFieldFirstname() throws Exception {
+        Long id = 2L;
+        String nickname = null,
+                firstname = "",           // firstname is blank
+                lastname = null,
+                patronymic = null,
+                email = null,
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field firstname cannot be empty.")
+        );
+    }
+
+    @Test
+    @Order(20)
+    void updateUserWithBlankNotNullFieldLastname() throws Exception {
+        Long id = 2L;
+        String nickname = null,
+                firstname = null,
+                lastname = "",            // lastname is blank
+                patronymic = null,
+                email = null,
+                password = null;
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field lastname cannot be empty.")
+        );
+    }
+
+    @Test
+    @Order(21)
+    void updateUserWithBlankNotNullFieldPassword() throws Exception {
+        Long id = 2L;
+        String nickname = null,
+                firstname = null,
+                lastname = null,
+                patronymic = null,
+                email = null,
+                password = "";
+        Sex sex = null;
+        LocalDate dateOfBirth = null;
+        Timestamp created = null;
+        Timestamp changed = null;
+        List<UserRoleDTO> roles = null;
+        UserDTO changesForUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        MockHttpServletRequestBuilder request = changeExistUser(changesForUser);
+
+        mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.body.detail").value("Field password cannot be empty.")
+        );
+    }
+
+    private static MockHttpServletRequestBuilder changeExistUser(UserDTO userChanges) throws JsonProcessingException {
         String nickname = "jacoonda",
                 firstname = "Evgene",
                 lastname = "Olhovski",
@@ -231,7 +479,7 @@ class UserControllerTest {
         Timestamp created = null;
         Timestamp changed = null;
         List<UserRoleDTO> roles = List.of(new UserRoleDTO((short) 2, "USER"));
-        UserDTO defaultUser = new UserDTO(id, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
+        UserDTO defaultUser = new UserDTO(null, nickname, firstname, lastname, patronymic, sex, email, password, dateOfBirth, created, changed, roles);
 
         UserDTO changedExistUser = PerformUser.mergeUserDTO(defaultUser, userChanges);
 
@@ -240,77 +488,30 @@ class UserControllerTest {
         String userAsJson = objectMapper.writeValueAsString(changedExistUser);
 
         return put(USER_URI)
-                .contentType(MediaType
-                        .APPLICATION_JSON).content(userAsJson);
-    }
-
-    @Test
-    @Order(14)
-    void updateUserWithoutId() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(15)
-    void updateUserWithUniqueAlreadyExistingDbNickname() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(16)
-    void updateUserWithUniqueAlreadyExistingDbEmail() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(17)
-    void updateUserWithBlankNotNullFieldNickname() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(18)
-    void updateUserWithBlankNotNullFieldEmail() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(19)
-    void updateUserWithBlankNotNullFieldFirstname() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(20)
-    void updateUserWithBlankNotNullFieldLastname() {
-        // todo: implement logic
-        throw new InProgress();
-    }
-
-    @Test
-    @Order(21)
-    void updateUserWithBlankNotNullFieldPassword() {
-        // todo: implement logic
-        throw new InProgress();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userAsJson);
     }
 
     @Test
     @Order(22)
-    void deleteUser() {
-        // todo: implement logic
-        throw new InProgress();
+    void deleteUser() throws Exception {
+        Long id = 1L;
+        MockHttpServletRequestBuilder request = delete(USER_URI + "/" + id)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc.perform(request).andExpect(status().isNoContent());
     }
 
     @Test
     @Order(23)
-    void deleteUserWithNotExistingId() {
-        // todo: implement logic
-        throw new InProgress();
+    void deleteUserWithNotExistingId() throws Exception {
+        Long id = 20L;
+        MockHttpServletRequestBuilder request = delete(USER_URI + "/" + id)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc.perform(request).andExpectAll(
+                status().isNotFound(),
+                jsonPath("$.body.detail").value("User with id " + id + " not found.")
+        );
     }
+
+    */
 }

@@ -1,19 +1,17 @@
 package com.echoteam.app.services;
 
-import com.echoteam.app.entities.dto.UserDTO;
+import com.echoteam.app.entities.User;
+import com.echoteam.app.entities.dto.entityDTO.UserDTO;
 
 import java.util.List;
 
 
 public interface UserService {
 
-    List<UserDTO> getAll();
-
-    UserDTO getById(Long id);
-
-    UserDTO createUser(UserDTO user);
-
-    UserDTO updateUser(UserDTO user);
-
+    List<User> getAll();
+    User getById(Long id);
+    User createUser(UserDTO user);
+    User updateUser(UserDTO user);
     void deleteById(Long id);
+
 }

@@ -1,6 +1,5 @@
 package com.echoteam.app.entities;
 
-import com.echoteam.app.entities.dto.UserRoleDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,22 +28,8 @@ public class UserRole {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     List<User> users;
 
-    public static UserRole of(UserRoleDTO dto) {
-        UserRole role = new UserRole();
-        role.setId(dto.id());
-        role.setName(dto.name());
-        return role;
+    @Override
+    public boolean equals(Object o) {
+        return Objects.equals(this.id, ((UserRole)o).id);
     }
-
-
-    public void acceptChanges(UserRole userRole) {
-        if (!Objects.equals(this.name, userRole.getName())) {
-            this.name = userRole.getName();
-        }
-    }
-
-    public UserRoleDTO toDTO() {
-        return new UserRoleDTO(this.id, this.name);
-    }
-
 }

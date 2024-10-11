@@ -27,6 +27,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- VALIDATION -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<!-- DB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,6 +49,18 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
 		</dependency>
 		<!-- JSON -->
 		<dependency>
@@ -64,8 +81,6 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-	
 	</dependencies>
 	
 	<build>
@@ -80,6 +95,7 @@
 					<password>123</password>
 					<schemas>public</schemas>
 					<cleanDisabled>false</cleanDisabled>
+					<locations>classpath:db/migration/main</locations>
 				</configuration>
 			</plugin>
 		</plugins>
