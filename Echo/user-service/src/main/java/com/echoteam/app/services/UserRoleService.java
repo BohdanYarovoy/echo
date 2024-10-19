@@ -1,8 +1,7 @@
 package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
-import com.echoteam.app.exceptions.ParameterIsNotValidException;
+import com.echoteam.app.entities.dto.nativeDTO.UserRoleDTO;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.entityDTO.UserAuthDTO;
-import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUserAuth;
-import com.echoteam.app.entities.dto.entityDTO.created.CreatedAuth;
+import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
+import com.echoteam.app.entities.dto.changedDTO.ChangedUserAuth;
+import com.echoteam.app.entities.dto.createdDTO.CreatedAuth;
 import com.echoteam.app.services.UserAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.echoteam.app.entities.dto.mappers.UserAuthMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserAuthMapper.INSTANCE;
 
 @Controller
 @RequestMapping("${application.endpoint.auth}")

@@ -1,7 +1,7 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUserDetail;
-import com.echoteam.app.entities.dto.entityDTO.created.CreatedDetail;
+import com.echoteam.app.entities.dto.changedDTO.ChangedUserDetail;
+import com.echoteam.app.entities.dto.createdDTO.CreatedDetail;
 import com.echoteam.app.services.UserDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static com.echoteam.app.entities.dto.mappers.UserDetailMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserDetailMapper.INSTANCE;
 
 @RestController
 @RequestMapping("${application.endpoint.detail}")

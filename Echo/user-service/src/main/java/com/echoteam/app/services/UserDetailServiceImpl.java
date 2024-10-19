@@ -2,7 +2,7 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserDetailRepository;
 import com.echoteam.app.entities.UserDetail;
-import com.echoteam.app.entities.dto.entityDTO.UserDetailDTO;
+import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.echoteam.app.entities.dto.mappers.UserDetailMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserDetailMapper.INSTANCE;
 
 @Service
 @RequiredArgsConstructor

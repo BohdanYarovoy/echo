@@ -2,6 +2,7 @@ package com.echoteam.app.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "user_auths")
 public class UserAuth {
 
@@ -50,4 +52,14 @@ public class UserAuth {
         this.changed = Timestamp.valueOf(LocalDateTime.now());
     }
 
+    public static UserAuth getValidInstance() {
+        return UserAuth.builder()
+                .id(1L)
+                .email("example@gmail.com")
+                .password("pass1234")
+                .created(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,1)))
+                .changed(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,2)))
+                .isDeleted(false)
+                .build();
+    }
 }

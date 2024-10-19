@@ -1,8 +1,8 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.entityDTO.UserDTO;
-import com.echoteam.app.entities.dto.entityDTO.changed.ChangedUser;
-import com.echoteam.app.entities.dto.entityDTO.created.CreatedUser;
+import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
+import com.echoteam.app.entities.dto.changedDTO.ChangedUser;
+import com.echoteam.app.entities.dto.createdDTO.CreatedUser;
 import com.echoteam.app.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Map;
 
-import static com.echoteam.app.entities.dto.mappers.UserMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserMapper.INSTANCE;
 
 @RestController
 @RequestMapping("${application.endpoint.user}")
@@ -46,7 +46,6 @@ public class UserController {
                                         UriComponentsBuilder uriBuilder) {
         var createdUser = userService.createUser(INSTANCE.toDTOFromCreatedUser(user));
         var createdUserDTO = INSTANCE.toDTOFromUser(createdUser);
-        createdUserDTO.doRoutine();
 
         URI location = uriBuilder
                 .replacePath(userUri + "/{id}")

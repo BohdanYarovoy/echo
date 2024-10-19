@@ -32,4 +32,15 @@ public class UserRole {
     public boolean equals(Object o) {
         return Objects.equals(this.id, ((UserRole)o).id);
     }
+
+    public static UserRole getValidInstance() {
+        return new UserRole((short) 1,"USER",null);
+    }
+
+    public static List<UserRole> getValidInstanceList() {
+        return List.of(
+                new UserRole((short) 1,"USER", null),
+                new UserRole((short) 2,"ADMIN", null)
+        );
+    }
 }

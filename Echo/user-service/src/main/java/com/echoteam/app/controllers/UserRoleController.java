@@ -1,7 +1,7 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.entityDTO.changed.ChangedRole;
-import com.echoteam.app.entities.dto.entityDTO.created.CreatedRole;
+import com.echoteam.app.entities.dto.changedDTO.ChangedRole;
+import com.echoteam.app.entities.dto.createdDTO.CreatedRole;
 import com.echoteam.app.services.UserRoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import static com.echoteam.app.entities.dto.mappers.UserRoleMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserRoleMapper.INSTANCE;
 
 @RequiredArgsConstructor
 @RestController

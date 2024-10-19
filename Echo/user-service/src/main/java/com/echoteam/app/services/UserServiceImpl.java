@@ -2,7 +2,7 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserRepository;
 import com.echoteam.app.entities.User;
-import com.echoteam.app.entities.dto.entityDTO.UserDTO;
+import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.echoteam.app.entities.dto.mappers.UserMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserMapper.INSTANCE;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
-
     private final UserRepository userRepository;
 
     @Transactional
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public User createUser(UserDTO userDto) {
-        var newUser = this.mapToUserWithRelations(userDto);
+        User newUser = INSTANCE.toUserFromDTO(userDto);
         return userRepository.save(newUser);
     }
 
@@ -64,20 +63,4 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(id);
     }
 
-    private User mapToUserWithRelations(UserDTO userDTO) {
-        User user = INSTANCE.toUserFromDTO(userDTO);
-        if (user.getUserAuth() != null) {
-            var userAuth = user.getUserAuth();
-            userAuth.setUser(user);
-            user.setUserAuth(userAuth);
-        }
-
-        if (user.getUserDetail() != null) {
-            var userDetail = user.getUserDetail();
-            userDetail.setUser(user);
-            user.setUserDetail(userDetail);
-        }
-
-        return user;
-    }
 }

@@ -1,7 +1,7 @@
 package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserAuth;
-import com.echoteam.app.entities.dto.entityDTO.UserAuthDTO;
+import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 
 import java.util.List;
 

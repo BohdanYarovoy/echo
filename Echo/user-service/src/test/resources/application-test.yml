@@ -1,0 +1,18 @@
+debug: false
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:mytest;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  flyway:
+    locations: classpath:db/test-migration  # Вказуємо шлях до скриптів міграції
+    enabled: true
+  jpa:
+    show-sql: false
+    database: h2
+    properties:
+      hibernate:
+        format_sql: false
+        hbm2ddl.auto: none

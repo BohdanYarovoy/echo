@@ -63,4 +63,15 @@ public class User {
         this.changed = Timestamp.valueOf(LocalDateTime.now());
     }
 
+    public static User getValidInstance() {
+        return User.builder()
+                .nickname("nickname")
+                .created(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,1)))
+                .changed(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,2)))
+                .isDeleted(false)
+                .userDetail(UserDetail.getValidInstance())
+                .userAuth(UserAuth.getValidInstance())
+                .roles(UserRole.getValidInstanceList())
+                .build();
+    }
 }

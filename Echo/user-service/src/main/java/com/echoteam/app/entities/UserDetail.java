@@ -2,6 +2,7 @@ package com.echoteam.app.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "user_details")
 public class UserDetail {
 
@@ -64,5 +66,21 @@ public class UserDetail {
     @PreUpdate
     protected void onUpdate() {
         this.changed = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public static UserDetail getValidInstance() {
+        return UserDetail.builder()
+                .id(1L)
+                .firstname("firstname")
+                .lastname("lastname")
+                .patronymic("patronymic")
+                .sex(Sex.MALE)
+                .dateOfBirth(LocalDate.of(1990, 1,1))
+                .phone("0971234567")
+                .about("Details about user")
+                .created(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,1)))
+                .changed(Timestamp.valueOf(LocalDateTime.of(2000,1,1,3,2)))
+                .isDeleted(false)
+                .build();
     }
 }

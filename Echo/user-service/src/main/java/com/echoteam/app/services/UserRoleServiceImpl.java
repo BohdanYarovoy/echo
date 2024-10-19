@@ -2,7 +2,7 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserRoleRepository;
 import com.echoteam.app.entities.UserRole;
-import com.echoteam.app.entities.dto.entityDTO.UserRoleDTO;
+import com.echoteam.app.entities.dto.nativeDTO.UserRoleDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 
-import static com.echoteam.app.entities.dto.mappers.UserRoleMapper.INSTANCE;
+import static com.echoteam.app.entities.mappers.UserRoleMapper.INSTANCE;
 
 @RequiredArgsConstructor
 @Service

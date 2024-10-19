@@ -1,7 +1,7 @@
 package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserDetail;
-import com.echoteam.app.entities.dto.entityDTO.UserDetailDTO;
+import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
 
 import java.util.List;
 
