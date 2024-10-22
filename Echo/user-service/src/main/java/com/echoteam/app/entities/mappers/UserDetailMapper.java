@@ -5,6 +5,7 @@ import com.echoteam.app.entities.dto.changedDTO.ChangedUserDetail;
 import com.echoteam.app.entities.dto.createdDTO.CreatedDetail;
 import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface UserDetailMapper {
     UserDetailDTO toDTOFromChangedDetail(ChangedUserDetail changedUserDetail);
     UserDetail toUserDetail(UserDetailDTO userDetailDTO);
 
+    @Mapping(source = "user.id", target = "userId")
     UserDetailDTO toDTOFromUserDetail(UserDetail userDetail);
 
     List<UserDetailDTO> toDTOsFromUserDetails(List<UserDetail> userDetails);

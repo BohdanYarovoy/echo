@@ -49,8 +49,15 @@ public class UserServiceImpl implements UserService{
         if (userDto.getId() == null)
             throw new ParameterIsNotValidException("Id is required.");
 
-        var changedUser = INSTANCE.toUserFromDTO(userDto);;
-        return userRepository.save(changedUser);
+        User existingUser = getById(userDto.getId());
+        User changedUser = INSTANCE.toUserFromDTO(userDto);
+        acceptChanges(existingUser, changedUser);
+        return userRepository.save(existingUser);
+    }
+
+    private void acceptChanges(User exist, User changed) {
+        exist.setNickname(changed.getNickname());
+        exist.setRoles(changed.getRoles());
     }
 
     @Transactional

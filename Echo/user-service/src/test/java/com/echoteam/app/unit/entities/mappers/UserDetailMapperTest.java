@@ -78,6 +78,7 @@ public class UserDetailMapperTest {
         UserDetailDTO dto = mapper.toDTOFromUserDetail(userDetail);
 
         assertThat(dto.getId()).isEqualTo(userDetail.getId());
+        assertThat(dto.getUserId()).isEqualTo(userDetail.getUser().getId());
         assertThat(dto.getFirstname()).isEqualTo(userDetail.getFirstname());
         assertThat(dto.getLastname()).isEqualTo(userDetail.getLastname());
         assertThat(dto.getPatronymic()).isEqualTo(userDetail.getPatronymic());
@@ -88,8 +89,6 @@ public class UserDetailMapperTest {
         assertThat(dto.getCreated()).isEqualTo(userDetail.getCreated());
         assertThat(dto.getChanged()).isEqualTo(userDetail.getChanged());
         assertThat(dto.getIsDeleted()).isEqualTo(userDetail.getIsDeleted());
-
-        assertThat(dto.getUserId()).isNull();
     }
 
 }

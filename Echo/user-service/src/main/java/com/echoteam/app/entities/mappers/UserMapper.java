@@ -22,6 +22,7 @@ public interface UserMapper {
     User toUserFromDTO(UserDTO userDTO);
 
     UserDTO toDTOFromUser(User user);
+    ChangedUser toChangedFromDTO(UserDTO userDTO);
 
     List<UserDTO> toDTOs(List<User> users);
 }

@@ -69,8 +69,12 @@ public class UserDetail {
     }
 
     public static UserDetail getValidInstance() {
+        User user = User.builder()
+                .id(1L)
+                .build();
         return UserDetail.builder()
                 .id(1L)
+                .user(user)
                 .firstname("firstname")
                 .lastname("lastname")
                 .patronymic("patronymic")

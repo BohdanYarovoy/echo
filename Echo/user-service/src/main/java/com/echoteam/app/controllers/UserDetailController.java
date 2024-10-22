@@ -19,10 +19,15 @@ import static com.echoteam.app.entities.mappers.UserDetailMapper.INSTANCE;
 @RequestMapping("${application.endpoint.detail}")
 @RequiredArgsConstructor
 public class UserDetailController {
-    @Value("${application.endpoint.detail}")
-    public String detailUri;
+    public static String detailUri;
     private final UserDetailService userDetailService;
 
+    @Value("${application.endpoint.detail}")
+    public void setDetailUri(String uri) {
+        UserDetailController.detailUri = uri;
+    }
+
+    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
     public ResponseEntity<?> getAll() {
         var details = userDetailService.getAll();

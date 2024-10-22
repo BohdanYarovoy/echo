@@ -1,8 +1,8 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
 import com.echoteam.app.entities.dto.changedDTO.ChangedUser;
 import com.echoteam.app.entities.dto.createdDTO.CreatedUser;
+import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
 import com.echoteam.app.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,15 @@ import static com.echoteam.app.entities.mappers.UserMapper.INSTANCE;
 @RequestMapping("${application.endpoint.user}")
 @RequiredArgsConstructor
 public class UserController {
-    @Value("${application.endpoint.user}")
-    public String userUri;
+    public static String userUri;
     private final UserService userService;
 
+    @Value("${application.endpoint.user}")
+    public void setUserUri(String uri) {
+        UserController.userUri = uri;
+    }
+
+    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
     public ResponseEntity<?> getUsers() {
         var usersDTOs = INSTANCE.toDTOs(userService.getAll());
@@ -45,15 +50,14 @@ public class UserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody CreatedUser user,
                                         UriComponentsBuilder uriBuilder) {
         var createdUser = userService.createUser(INSTANCE.toDTOFromCreatedUser(user));
-        var createdUserDTO = INSTANCE.toDTOFromUser(createdUser);
 
         URI location = uriBuilder
                 .replacePath(userUri + "/{id}")
-                .buildAndExpand(Map.of("id", createdUserDTO.getId()))
+                .buildAndExpand(Map.of("id", createdUser.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(location)
-                .body(createdUserDTO);
+                .build();
     }
 
 
@@ -61,16 +65,13 @@ public class UserController {
     public ResponseEntity<?> updateUser(@Valid @RequestBody ChangedUser changedUser,
                                         UriComponentsBuilder uriBuilder) {
         var user = userService.updateUser(INSTANCE.toDTOFromChangedUser(changedUser));
-        var updatedUserDTO = INSTANCE.toDTOFromUser(user);
-        updatedUserDTO.doRoutine();
-
         URI location = uriBuilder
                 .replacePath(userUri + "/{id}")
-                .buildAndExpand(Map.of("id", updatedUserDTO.getId()))
+                .buildAndExpand(Map.of("id", user.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.OK)
                 .location(location)
-                .body(updatedUserDTO);
+                .build();
     }
 
 

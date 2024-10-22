@@ -17,7 +17,7 @@ public class ChangedUser {
     @Positive(message = "Id should be positive")
     @NotNull(message = "User id is required")
     private Long id;
-    @NotNull(message = "Nickname can`t be empty")
+    @NotNull(message = "Nickname can't be empty")
     @Size(min = 4, max = 50, message = "Nickname cannot be greater than 50 and less than 4 characters")
     @Pattern(regexp = "^[\\S]+$", message = "Nickname should be without: whitespaces")
     private String nickname;

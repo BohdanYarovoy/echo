@@ -74,7 +74,7 @@ public class ChangedUserValidationTest {
 
         // then
         assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage()).isEqualTo("Nickname can`t be empty");
+        assertThat(violations.iterator().next().getMessage()).isEqualTo("Nickname can't be empty");
     }
 
     @Test

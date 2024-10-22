@@ -6,21 +6,21 @@ VALUES ('USER'),
 
 -- Вставка користувачів
 INSERT INTO users (nickname, avatar)
-VALUES ('john_doe', NULL),
-       ('jane_smith', NULL),
-       ('admin_user', NULL);
+VALUES ('nickname1', NULL),
+       ('nickname2', NULL),
+       ('nickname3', NULL);
 
 -- Вставка даних користувачів
-INSERT INTO user_details (first_name, last_name, patronymic, phone, about, sex, date_of_birth, user_id)
-VALUES ('John', 'Doe', 'Michael', '1234567890', 'Just a regular user.', 1, '1990-01-01', 1),
-       ('Jane', 'Smith', 'Alice', '0987654321', 'Loves programming.', 0, '1995-05-15', 2),
-       ('Admin', 'User', NULL, '1112233445', 'Admin user for testing.', NULL, '1985-10-10', 3);
+INSERT INTO user_details (user_id ,first_name, last_name, patronymic, phone, about, sex, date_of_birth)
+VALUES (1, 'firstname1', 'lastname1', 'patronymic1', '0971234567', 'Some details about user.', 0, '1990-01-01'),
+       (2, 'firstname2', 'lastname2', 'patronymic1', '0972345678', 'Some details about user.', 1, '1995-01-01'),
+       (3, 'firstname3', 'lastname3', 'patronymic1', '0973456789', 'Some details about user.', NULL, '1985-01-01');
 
 -- Вставка даних для автентифікації користувачів
-INSERT INTO user_auths (email, password, user_id)
-VALUES ('john.doe@example.com', 'password123', 1),
-       ('jane.smith@example.com', 'password456', 2),
-       ('admin@example.com', 'adminpassword', 3);
+INSERT INTO user_auths (user_id, email, password)
+VALUES (1, 'example1@gmail.com', 'password123'),
+       (2, 'example2@gmail.com', 'password456'),
+       (3, 'example3@gmail.com', 'password789');
 
 -- Вставка зв’язків між користувачами та ролями
 INSERT INTO users_roles (user_id, role_id)
