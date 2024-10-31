@@ -37,8 +37,8 @@ class UserControllerTest {
                 .isEqualTo(HttpStatus.OK);
 
         assertThat(response.getBody())
-                .as("Expected to receive 3 users from the database, but received different amount.")
-                .hasSize(3);
+                .as("Expected to receive 4 users from the database, but received different amount.")
+                .hasSize(4);
     }
 
     @Test
@@ -93,10 +93,10 @@ class UserControllerTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void createUser_shouldReturn201_whenIsValid() {
         CreatedUser createdUser = CreatedUser.getValidInstance();
-        ResponseEntity<String> response = template.postForEntity(
+        ResponseEntity<Void> response = template.postForEntity(
                 UserController.userUri,
                 createdUser,
-                String.class
+                Void.class
         );
 
         assertThat(response.getStatusCode())
@@ -471,6 +471,5 @@ class UserControllerTest {
                 .as("Expect that response violation detail contains message 'User with id %d not found.'.", userID)
                 .isEqualTo("User with id %d not found.", userID);
     }
-
 
 }

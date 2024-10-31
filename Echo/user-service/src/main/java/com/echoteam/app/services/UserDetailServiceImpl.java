@@ -50,6 +50,7 @@ public class UserDetailServiceImpl implements UserDetailService{
         return userDetailRepository.save(userDetail);
     }
 
+    @Transactional
     @Override
     public UserDetail update(UserDetailDTO userDetailDTO) {
         if (userDetailDTO.getId() == null)
@@ -57,8 +58,20 @@ public class UserDetailServiceImpl implements UserDetailService{
         if (userDetailDTO.getUserId() != null)
             throw new ParameterIsNotValidException("There is no need details with user id.");
 
-        var userDetail = INSTANCE.toUserDetail(userDetailDTO);
-        return userDetailRepository.save(userDetail);
+        var existing = getById(userDetailDTO.getId());
+        var changed = INSTANCE.toUserDetail(userDetailDTO);
+        acceptChanges(existing,changed);
+        return userDetailRepository.save(existing);
+    }
+
+    private void acceptChanges(UserDetail existing, UserDetail changed) {
+        existing.setFirstname(changed.getFirstname());
+        existing.setLastname(changed.getLastname());
+        existing.setPatronymic(changed.getPatronymic());
+        existing.setSex(changed.getSex());
+        existing.setDateOfBirth(changed.getDateOfBirth());
+        existing.setPhone(changed.getPhone());
+        existing.setAbout(changed.getAbout());
     }
 
     @Override

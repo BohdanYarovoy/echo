@@ -1,9 +1,6 @@
 package com.echoteam.app.entities.dto.changedDTO;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +14,7 @@ public class ChangedUserAuth {
     @Positive(message = "Id should be positive")
     @NotNull(message = "Auth id is required")
     private Long id;
-    @NotNull(message = "Email address is required")
+    @NotBlank(message = "Email address is required")
     @Size(max = 100, message = "Email length shouldn`t be greater than 100 characters")
     @Email(message = "Incorrect email address")
     private String email;

@@ -8,9 +8,10 @@ VALUES ('USER'),
 INSERT INTO users (nickname, avatar)
 VALUES ('nickname1', NULL),
        ('nickname2', NULL),
-       ('nickname3', NULL);
+       ('nickname3', NULL),
+       ('nickname4', NULL);
 
--- Вставка даних користувачів
+-- Вставка даних користувачівUserDetailC
 INSERT INTO user_details (user_id ,first_name, last_name, patronymic, phone, about, sex, date_of_birth)
 VALUES (1, 'firstname1', 'lastname1', 'patronymic1', '0971234567', 'Some details about user.', 0, '1990-01-01'),
        (2, 'firstname2', 'lastname2', 'patronymic1', '0972345678', 'Some details about user.', 1, '1995-01-01'),

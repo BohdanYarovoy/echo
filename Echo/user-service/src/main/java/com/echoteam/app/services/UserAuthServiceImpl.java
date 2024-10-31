@@ -58,8 +58,14 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (updatedAuth.getUserId() != null)
             throw new ParameterIsNotValidException("There is no need auth with user id.");
 
-        var auth = INSTANCE.toUserAuth(updatedAuth);
-        return authRepository.save(auth);
+        var forUpdate = INSTANCE.toUserAuth(updatedAuth);
+        var existing = getById(updatedAuth.getId());
+        acceptChanges(existing, forUpdate);
+        return authRepository.save(existing);
+    }
+
+    private void acceptChanges(UserAuth existing, UserAuth forUpdate) {
+        existing.setEmail(forUpdate.getEmail());
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import com.echoteam.app.entities.dto.changedDTO.ChangedUserAuth;
 import com.echoteam.app.entities.dto.createdDTO.CreatedAuth;
 import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface UserAuthMapper {
     UserAuthDTO toDTOFromChangedAuth(ChangedUserAuth changedUserAuth);
     UserAuth toUserAuth(UserAuthDTO userAuthDTO);
 
+    @Mapping(source = "user.id", target = "userId")
     UserAuthDTO toDTOFromUserAuth(UserAuth userAuth);
 
     List<UserAuthDTO> toDTOsFromAuths(List<UserAuth> userAuths);

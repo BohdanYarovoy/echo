@@ -1,8 +1,8 @@
 package com.echoteam.app.controllers;
 
-import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 import com.echoteam.app.entities.dto.changedDTO.ChangedUserAuth;
 import com.echoteam.app.entities.dto.createdDTO.CreatedAuth;
+import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 import com.echoteam.app.services.UserAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +22,15 @@ import static com.echoteam.app.entities.mappers.UserAuthMapper.INSTANCE;
 @RequestMapping("${application.endpoint.auth}")
 @RequiredArgsConstructor
 public class UserAuthController {
-    @Value("${application.endpoint.auth}")
-    public String authUri;
+    public static String authUri;
     private final UserAuthService authService;
 
+    @Value("${application.endpoint.auth}")
+    public void setAuthUri(String authUri) {
+        UserAuthController.authUri = authUri;
+    }
+
+    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
     public ResponseEntity<List<UserAuthDTO>> getAll() {
         var auths = authService.getAll();
@@ -45,14 +50,13 @@ public class UserAuthController {
                                                   UriComponentsBuilder uriBuilder) {
         var createdAuthDTO = INSTANCE.toDTOFromCreatedAuth(createdAuth);
         var savedAuth = authService.create(createdAuthDTO);
-        var authDTO = INSTANCE.toDTOFromUserAuth(savedAuth);
 
         URI uri = uriBuilder.replacePath(authUri + "/{id}")
-                .buildAndExpand("id", authDTO.getId())
+                .buildAndExpand(savedAuth.getId())
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri)
-                .body(authDTO);
+                .build();
     }
 
     @PutMapping
@@ -60,14 +64,13 @@ public class UserAuthController {
                                                   UriComponentsBuilder uriBuilder) {
         var changedAuthDTO = INSTANCE.toDTOFromChangedAuth(changedUserAuth);
         var updatedAuth = authService.update(changedAuthDTO);
-        var updatedAuthDTO = INSTANCE.toDTOFromUserAuth(updatedAuth);
 
         URI uri = uriBuilder.replacePath(authUri + "/{id}")
-                .buildAndExpand("id", updatedAuthDTO.getId())
+                .buildAndExpand(updatedAuth.getId())
                 .toUri();
         return ResponseEntity.status(HttpStatus.OK)
                 .location(uri)
-                .body(updatedAuthDTO);
+                .build();
     }
 
     @DeleteMapping("/{id}")

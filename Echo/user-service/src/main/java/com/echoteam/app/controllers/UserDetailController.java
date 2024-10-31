@@ -47,14 +47,13 @@ public class UserDetailController {
                                           UriComponentsBuilder uriBuilder) {
         var createdDetailDTO = INSTANCE.toDTOFromCreatedDetail(createdDetail);
         var detail = userDetailService.create(createdDetailDTO);
-        var detailDTO = INSTANCE.toDTOFromUserDetail(detail);
 
         URI location = uriBuilder.replacePath(detailUri + "/{id}")
-                .buildAndExpand(detailDTO.getId())
+                .buildAndExpand(detail.getId())
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(location)
-                .body(detailDTO);
+                .build();
     }
 
     @PutMapping
@@ -62,13 +61,12 @@ public class UserDetailController {
                                           UriComponentsBuilder uriBuilder) {
         var changedDetailDTO = INSTANCE.toDTOFromChangedDetail(changedUserDetail);
         var detail = userDetailService.update(changedDetailDTO);
-        var detailDTO = INSTANCE.toDTOFromUserDetail(detail);
 
         URI location = uriBuilder.replacePath(detailUri + "/{id}")
-                .buildAndExpand(detailDTO.getId()).toUri();
+                .buildAndExpand(detail.getId()).toUri();
         return ResponseEntity.status(HttpStatus.OK)
                 .location(location)
-                .body(detailDTO);
+                .build();
     }
 
     @DeleteMapping("/{id}")

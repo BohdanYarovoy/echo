@@ -21,10 +21,15 @@ import static com.echoteam.app.entities.mappers.UserRoleMapper.INSTANCE;
 @RestController
 @RequestMapping("${application.endpoint.role}")
 public class UserRoleController {
-    @Value("${application.endpoint.role}")
-    public String roleUri;
+    public static String roleUri;
     private final UserRoleService userRoleService;
 
+    @Value("${application.endpoint.role}")
+    public void setRoleUri(String roleUri) {
+        UserRoleController.roleUri = roleUri;
+    }
+
+    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
     public ResponseEntity<?> getAllUserRoles() {
         var userRoles = userRoleService.getAll();
@@ -51,15 +56,14 @@ public class UserRoleController {
                                             UriComponentsBuilder uriBuilder) {
         var userRoleDTO = INSTANCE.toDTOFromCreatedRole(createdRole);
         var role = userRoleService.createUserRole(userRoleDTO);
-        var roleDTO = INSTANCE.toDTO(role);
 
         URI location = uriBuilder
                 .replacePath(roleUri + "/{id}")
-                .buildAndExpand(Map.of("id", roleDTO.getId()))
+                .buildAndExpand(Map.of("id", role.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(location)
-                .body(roleDTO);
+                .build();
     }
 
     @PutMapping
@@ -67,15 +71,14 @@ public class UserRoleController {
                                             UriComponentsBuilder uriBuilder) {
         var userRoleDTO = INSTANCE.toDTOFromChangedRole(changedRole);
         var role = userRoleService.updateUserRole(userRoleDTO);
-        var roleDTO = INSTANCE.toDTO(role);
 
         URI location = uriBuilder
                 .replacePath(roleUri + "/{id}")
-                .buildAndExpand(Map.of("id", roleDTO.getId()))
+                .buildAndExpand(Map.of("id", role.getId()))
                 .toUri();
         return ResponseEntity.status(HttpStatus.OK)
                 .location(location)
-                .body(roleDTO);
+                .build();
     }
 
     @DeleteMapping("/{id}")
