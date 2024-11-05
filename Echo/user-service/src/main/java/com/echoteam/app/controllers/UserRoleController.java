@@ -1,11 +1,17 @@
 package com.echoteam.app.controllers;
 
+import com.echoteam.app.entities.UserRole;
 import com.echoteam.app.entities.dto.changedDTO.ChangedRole;
 import com.echoteam.app.entities.dto.createdDTO.CreatedRole;
+import com.echoteam.app.entities.dto.nativeDTO.UserRoleDTO;
 import com.echoteam.app.services.UserRoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +35,28 @@ public class UserRoleController {
         UserRoleController.roleUri = roleUri;
     }
 
-    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
-    public ResponseEntity<?> getAllUserRoles() {
-        var userRoles = userRoleService.getAll();
-        var userRolesDTOs = INSTANCE.toDTOs(userRoles);
-        return ResponseEntity.ok(userRolesDTOs);
+    public ResponseEntity<?> getAllUserRoles(@RequestParam(name ="page",defaultValue = "0") int page,
+                                             @RequestParam(name ="size",defaultValue = "10") int size,
+                                             @RequestParam(name ="sortBy",defaultValue = "id") String sortBy,
+                                             @RequestParam(name ="direction",defaultValue = "asc") String direction) {
+        var sort = creteSort(sortBy, direction);
+        var pageRequest = PageRequest.of(page, size, sort);
+        Page<UserRole> pageResponse = userRoleService.getAll(pageRequest);
+
+        PagedModel<UserRoleDTO> pageRolesDTOs = cretePagedMode(pageResponse);
+        return ResponseEntity.ok(pageRolesDTOs);
+    }
+
+    private PagedModel<UserRoleDTO> cretePagedMode(Page<UserRole> pageResponse) {
+        Page<UserRoleDTO> pageRoleDTOs = pageResponse.map(INSTANCE::toDTO);
+        return new PagedModel<>(pageRoleDTOs);
+    }
+
+    private Sort creteSort(String sortBy, String direction) {
+        return direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
     }
 
     @GetMapping("/{id}")
@@ -65,7 +87,6 @@ public class UserRoleController {
                 .location(location)
                 .build();
     }
-
     @PutMapping
     public ResponseEntity<?> updateUserRole(@Valid @RequestBody ChangedRole changedRole,
                                             UriComponentsBuilder uriBuilder) {
@@ -80,7 +101,6 @@ public class UserRoleController {
                 .location(location)
                 .build();
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserRole(@PathVariable("id") Short id) {
         userRoleService.deleteById(id);

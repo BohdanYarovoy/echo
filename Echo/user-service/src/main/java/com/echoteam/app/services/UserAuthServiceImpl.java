@@ -6,10 +6,10 @@ import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static com.echoteam.app.entities.mappers.UserAuthMapper.INSTANCE;
 
@@ -21,8 +21,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Transactional
     @Override
-    public List<UserAuth> getAll() {
-        return authRepository.findAll();
+    public Page<UserAuth> getAll(Pageable pageable) {
+        return authRepository.findAll(pageable);
     }
 
     @Transactional

@@ -1,21 +1,27 @@
-DONE - Make AuthService(AuthController)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-https://javarush.com/groups/posts/3918-rest-api-i-validacija-dannihkh
+DATE -> 2024-09-24
 
-Make Validation for User - DONE
-Make Validation for UserDetail - DONE
-Make Validation for UserAuth - DONE
-Make Validation for UserRole - DONE
+DONE - Make UserService (UserController)
+DONE - Make DetailService (DetailController)
+DONE - Make AuthService (AuthController)
+DONE - Make UserRoleService (UserRoleController)
 
-Check methods for putting(changing) entities, cause when you change object, you need validate this.
-I give you create classes for updating such entities and describe validation rules there.
-It is a good way to use these classes in controllers to accept changes for entities.
+DONE - Make Validation for User
+DONE - Make Validation for UserDetail
+DONE - Make Validation for UserAuth
+DONE - Make Validation for UserRole
 
-Clean up code. You need to pay attention to validation, that is implemented by DB exception.
+DONE - Make unit-tests for User dtos
+DONE - Make unit-tests for Detail dtos
+DONE - Make unit-tests for Auth dtos
+DONE - Make unit-tests for UserRole dtos
 
-Make integration tests for UserController
-Make integration tests for UserDetailController
-Make integration tests for UserAuthController
-Make integration tests for UserRoleController
+DONE - Make integration tests for UserController
+DONE - Make integration tests for UserDetailController
+DONE - Make integration tests for UserAuthController
+DONE - Make integration tests for UserRoleController
 
---> Way to make frontend-service
+DATE -> 2024-11-05
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,6 +6,7 @@ import com.echoteam.app.entities.dto.createdDTO.CreatedAuth;
 import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,23 +29,144 @@ public class UserAuthControllerTest {
     TestRestTemplate template;
 
     @Test
-    void getAll_shouldReturn200_whenRequested() {
+    void getAll_shouldReturn200_whenRequestedWithoutParameters() {
         // when
-        ResponseEntity<UserAuthDTO[]> response = template.getForEntity(
+        ResponseEntity<String> response = template.getForEntity(
                 UserAuthController.authUri,
-                UserAuthDTO[].class
+                String.class
         );
 
         // then
         assertThat(response.getStatusCode())
-                .withFailMessage("Expect response status 200 OK when requested, but got %s.", response.getStatusCode())
+                .withFailMessage("Expected response status 200 OK when requested, but got %s.", response.getStatusCode())
                 .isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
-                .withFailMessage("Expect response body is not null, but it is.")
+                .withFailMessage("Expected response body to be non-null, but it is null.")
                 .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .withFailMessage("Expected page number to be 0, but got %d.", pageNumber)
+                .isEqualTo(0);
+
+        int pageSize = context.read("$.page.size");
+        assertThat(pageSize)
+                .withFailMessage("Expected page size to be 10, but got %d.", pageSize)
+                .isEqualTo(10);
+
+        int contentSize = context.read("$.content.length()");
+        assertThat(contentSize)
+                .withFailMessage("Expected content size to be 3, but got %d.", contentSize)
+                .isEqualTo(3);
+
+        JSONArray ids = context.read("$.content[*].id");
+        assertThat(ids)
+                .withFailMessage("Expected IDs to be [1, 2, 3], but got %s.", ids)
+                .containsExactly(1, 2, 3);
+
+        JSONArray emails = context.read("$.content[*].email");
+        assertThat(emails)
+                .withFailMessage("Expected emails to be [\"example1@gmail.com\", \"example2@gmail.com\"," +
+                                 " \"example3@gmail.com\"], but got %s.", emails)
+                .containsExactly("example1@gmail.com", "example2@gmail.com", "example3@gmail.com");
+    }
+
+    @Test
+    void getAll_shouldReturn200_whenRequestedWithParameters() {
+        // given
+        int page = 0;
+        int size = 2;
+        String sortBy = "email";
+        String direction = "desc";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserAuthController.authUri + "?page=" + page + "&size=" + size +
+                "&sortBy=" + sortBy + "&direction=" + direction,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expected response status 200 OK when requested, but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
-                .withFailMessage("Expect response body size is, but it is %s.", response.getBody().length)
-                .hasSize(3);
+                .withFailMessage("Expected response body to be non-null, but it is null.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .withFailMessage("Expected page number to be %d, but got %d.", page, pageNumber)
+                .isEqualTo(page);
+
+        int pageSize = context.read("$.page.size");
+        assertThat(pageSize)
+                .withFailMessage("Expected page size to be %d, but got %d.", size, pageSize)
+                .isEqualTo(size);
+
+        int contentLength = context.read("$.content.length()");
+        assertThat(contentLength)
+                .withFailMessage("Expected content length to be %d, but got %d.", size, contentLength)
+                .isEqualTo(size);
+
+        JSONArray ids = context.read("$.content[*].id");
+        assertThat(ids)
+                .withFailMessage("Expected IDs to be [3, 2], but got %s.", ids)
+                .containsExactly(3, 2);
+
+        JSONArray emails = context.read("$.content[*].email");
+        assertThat(emails)
+                .withFailMessage("Expected emails to be [\"example3@gmail.com\"," +
+                                 " \"example2@gmail.com\"], but got %s.", emails)
+                .containsExactly("example3@gmail.com", "example2@gmail.com");
+    }
+
+    @Test
+    void getAll_shouldReturn200_whenRequestedPageIsNotExist() {
+        // given
+        int page = 10;          // there is no page 10
+        int size = 10;
+        String sortBy = "";
+        String direction = "";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserAuthController.authUri + "?page=" + page + "&size=" + size +
+                "&sortBy=" + sortBy + "&direction=" + direction,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expected response status 200 OK when requested non-existent page, " +
+                                 "but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+                .withFailMessage("Expected response body to be non-null for a non-existent " +
+                                 "page request, but it is null.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .withFailMessage("Expected page number to be %d, but got %d.", page, pageNumber)
+                .isEqualTo(page);
+
+        int pageSize = context.read("$.page.size");
+        assertThat(pageSize)
+                .withFailMessage("Expected page size to be %d, but got %d.", size, pageSize)
+                .isEqualTo(size);
+
+        int contentLength = context.read("$.content.length()");
+        assertThat(contentLength)
+                .withFailMessage("Expected content length to be 0 for a non-existent page, " +
+                                 "but got %d.", contentLength)
+                .isEqualTo(0);
     }
 
     @Test

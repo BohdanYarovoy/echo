@@ -3,6 +3,7 @@ package com.echoteam.app.controllers.exceptionAdvices;
 import com.echoteam.app.entities.User;
 import com.echoteam.app.entities.UserAuth;
 import com.echoteam.app.entities.UserDetail;
+import com.echoteam.app.entities.UserRole;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityNotFoundException;
@@ -62,6 +63,8 @@ public class ControllerAdvice {
             return UserDetail.class;
         } else if (message.contains("user_auths")) {
             return UserAuth.class;
+        } else if (message.contains("roles")) {
+            return UserRole.class;
         }
         return null;
     }

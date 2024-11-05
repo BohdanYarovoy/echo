@@ -1,11 +1,17 @@
 package com.echoteam.app.controllers;
 
+import com.echoteam.app.entities.UserDetail;
 import com.echoteam.app.entities.dto.changedDTO.ChangedUserDetail;
 import com.echoteam.app.entities.dto.createdDTO.CreatedDetail;
+import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
 import com.echoteam.app.services.UserDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +33,27 @@ public class UserDetailController {
         UserDetailController.detailUri = uri;
     }
 
-    // todo: this method need to be with pagination, because when client will request, he can get all entities.
     @GetMapping
-    public ResponseEntity<?> getAll() {
-        var details = userDetailService.getAll();
-        var detailsDTOs = INSTANCE.toDTOsFromUserDetails(details);
-        return ResponseEntity.ok(detailsDTOs);
+    public ResponseEntity<PagedModel<UserDetailDTO>> getAll(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                            @RequestParam(name = "size", defaultValue = "10") int size,
+                                                            @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
+                                                            @RequestParam(name = "direction", defaultValue = "asc") String direction) {
+        Sort sort = createSort(sortBy, direction);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<UserDetail> pageResponse = userDetailService.getAll(pageRequest);
+        PagedModel<UserDetailDTO> pagedModel = createPagedModel(pageResponse);
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    private PagedModel<UserDetailDTO> createPagedModel(Page<UserDetail> pageResponse) {
+        Page<UserDetailDTO> pageDTOs = pageResponse.map(INSTANCE::toDTOFromUserDetail);
+        return new PagedModel<>(pageDTOs);
+    }
+
+    private Sort createSort(String sortBy, String direction) {
+        return direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
     }
 
     @GetMapping("/{id}")

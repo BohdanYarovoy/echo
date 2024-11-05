@@ -6,6 +6,8 @@ import com.echoteam.app.entities.dto.nativeDTO.UserRoleDTO;
 import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +23,8 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     @Transactional
     @Override
-    public List<UserRole> getAll() {
-        return userRoleRepository.findAll();
+    public Page<UserRole> getAll(Pageable pageable) {
+        return userRoleRepository.findAll(pageable);
     }
 
     @Transactional
@@ -50,8 +52,17 @@ public class UserRoleServiceImpl implements UserRoleService{
     @Transactional
     @Override
     public UserRole updateUserRole(UserRoleDTO dto) {
-        var role = INSTANCE.toUserRole(dto);
-        return userRoleRepository.save(role);
+        if (dto.getId() == null)
+            throw new ParameterIsNotValidException("Id is required.");
+
+        var changed = INSTANCE.toUserRole(dto);
+        var existing = findRoleById(dto.getId());
+        acceptChanges(existing, changed);
+        return userRoleRepository.save(existing);
+    }
+
+    private void acceptChanges(UserRole existing, UserRole changed) {
+        existing.setName(changed.getName());
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import com.echoteam.app.entities.dto.createdDTO.CreatedDetail;
 import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,47 +32,128 @@ public class UserDetailControllerTest {
     private TestRestTemplate template;
 
     @Test
-    void getAll_shouldReturn200_whenIsRequested() {
-        ResponseEntity<UserDetailDTO[]> response = template.getForEntity(UserDetailController.detailUri, UserDetailDTO[].class);
+    void getAll_shouldReturn200_whenIsRequestedWithoutPageableParameters() {
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserDetailController.detailUri,
+                String.class
+        );
 
+        // then
         assertThat(response.getStatusCode())
-                .withFailMessage("Expect response status code 200 OK when it is " +
-                                 "requested, but got %s.", response.getStatusCode())
+                .withFailMessage("Expected response status code 200 OK, but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+
+        assertThat(response.getBody())
+                .as("Expected response body to be non-null with UserDetailDTO[] content, but it was null.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+        int contentLength = context.read("$.content.length()");
+        assertThat(contentLength)
+                .withFailMessage("Expected response body to contain 3 items, but got %s.", contentLength)
+                .isEqualTo(3);
+
+        JSONArray ids = context.read("$.content[*].id");
+        assertThat(ids)
+                .withFailMessage("Expected ids to be [1, 2, 3], but got %s.", ids)
+                .containsExactly(1, 2, 3);
+
+        JSONArray nicknames = context.read("$.content[*].firstname");
+        assertThat(nicknames)
+                .withFailMessage("Expected firstnames to be ['firstname1', 'firstname2', 'firstname3'], but got %s.", nicknames)
+                .containsExactly("firstname1", "firstname2", "firstname3");
+    }
+
+    @Test
+    void getAll_shouldReturn200_whenRequestedWithParameters() {
+        // given
+        int number = 0;
+        int size = 2;
+        String sortBy = "firstname";
+        String direction = "desc";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserDetailController.detailUri + "?page=" + number + "&size=" + size + "&sortBy=" + sortBy + "&direction=" + direction,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expected response status code 200 OK, but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+
+        assertThat(response.getBody())
+                .as("Expected non-null response body, but it was null.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+
+        int pageSize = context.read("$.page.size");
+        assertThat(pageSize)
+                .withFailMessage("Expected page size to be %d, but got %d.", size, pageSize)
+                .isEqualTo(size);
+
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .withFailMessage("Expected page number to be %d, but got %d.", number, pageNumber)
+                .isEqualTo(number);
+
+        int contentLength = context.read("$.content.length()");
+        assertThat(contentLength)
+                .withFailMessage("Expected content length to be %d, but got %d.", size, contentLength)
+                .isEqualTo(size);
+
+        JSONArray ids = context.read("$.content[*].id");
+        assertThat(ids)
+                .withFailMessage("Expected IDs to be [3, 2], but got %s.", ids)
+                .containsExactly(3, 2);
+
+        JSONArray firstnames = context.read("$.content[*].firstname");
+        assertThat(firstnames)
+                .withFailMessage("Expected firstnames to be ['firstname3', 'firstname2'], but got %s.", firstnames)
+                .containsExactly("firstname3", "firstname2");
+    }
+
+    @Test
+    void getAll_shouldReturn200_whenRequestedNoExistingPage() {
+        // given
+        int page = 10;          // there no any pages
+        int size = 10;
+        String sortBy = "";
+        String direction = "";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserDetailController.detailUri + "?page=" + page + "&size=" + size + "&sortBy=" + sortBy + "&direction=" + direction,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expected HTTP status code 200 OK, but got %s.", response.getStatusCode())
                 .isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
-                .as("Expect that response has body with UserDetailDTO[].")
+                .withFailMessage("Expected response body to be non-null but got null.")
                 .isNotNull();
 
-        UserDetailDTO[] body = response.getBody();
-        assertThat(body)
-                .as("Expect that body has array of UserDetailDTO with length 3 because db has only 3 entity.")
-                .hasSize(3);
-        assertThat(body[0])
-                .as("Expect that we retrieve UserDetailDTO.class object.")
-                .isInstanceOf(UserDetailDTO.class);
+        DocumentContext context = JsonPath.parse(response.getBody());
 
-        // make sure that any fields was retrieved correct
-        assertThat(body[0].getFirstname()).isEqualTo("firstname1");
-        assertThat(body[0].getLastname()).isEqualTo("lastname1");
-        assertThat(body[0].getPatronymic()).isEqualTo("patronymic1");
-        assertThat(body[0].getPhone()).isEqualTo("0971234567");
-        assertThat(body[0].getAbout()).isEqualTo("Some details about user.");
-        assertThat(body[0].getSex())
-                .as("Expect that UserDetailDTO that was retrieved from db has male sex.")
-                .isEqualTo(Sex.MALE);
-        assertThat(body[0].getDateOfBirth())
-                .as("Expected dateOfBirth is 1990-01-01.")
-                .isEqualTo(LocalDate.of(1990,1,1));
-        assertThat(body[0].getIsDeleted())
-                .as("Expected that field isDeleted is false.")
-                .isFalse();
-        assertThat(body[0].getCreated())
-                .as("Expect that UserDetailDTO`s field 'created' has value.")
-                .isNotNull();
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .withFailMessage("Expected page number to be %d, but got %d.", page, pageNumber)
+                .isEqualTo(page);
 
-        assertThat(body[0].getChanged())
-                .as("Expect that field 'changed' hasn't any value, because it hasn't never changed.")
-                .isNull();
+        int pageSize = context.read("$.page.size");
+        assertThat(pageSize)
+                .withFailMessage("Expected page size to be %d, but got %d.", size, pageSize)
+                .isEqualTo(size);
+
+        int contentLength = context.read("$.content.length()");
+        assertThat(contentLength)
+                .withFailMessage("Expected content length to be 0 for a non-existing page, but got %d.", contentLength)
+                .isEqualTo(0);
     }
 
     @Test

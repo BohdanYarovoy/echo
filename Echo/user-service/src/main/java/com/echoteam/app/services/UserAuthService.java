@@ -2,11 +2,11 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserAuth;
 import com.echoteam.app.entities.dto.nativeDTO.UserAuthDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserAuthService {
-    List<UserAuth> getAll();
+    Page<UserAuth> getAll(Pageable pageable);
     UserAuth getById(Long id);
     UserAuth create(UserAuthDTO createdAuth);
     UserAuth update(UserAuthDTO updatedAuth);

@@ -2,12 +2,12 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.entities.UserDetail;
 import com.echoteam.app.entities.dto.nativeDTO.UserDetailDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserDetailService {
 
-    List<UserDetail> getAll();
+    Page<UserDetail> getAll(Pageable pageable);
     UserDetail getById(Long id);
     UserDetail create(UserDetailDTO userDetailDTO);
     UserDetail update(UserDetailDTO userDetailDTO);

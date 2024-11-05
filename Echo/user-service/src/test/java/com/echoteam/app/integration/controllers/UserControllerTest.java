@@ -7,6 +7,7 @@ import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
 import com.echoteam.app.entities.mappers.UserMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,16 +30,90 @@ class UserControllerTest {
     TestRestTemplate template;
 
     @Test
-    void getUsers_shouldReturn200_whenIsRequested() {
-        ResponseEntity<UserDTO[]> response = template.getForEntity(UserController.userUri, UserDTO[].class);
+    void getUsers_shouldReturn200_whenIsRequestedWithoutPageableParameters() {
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserController.userUri,
+                String.class
+        );
+
+        // then
         assertThat(response.getStatusCode())
-                .as("Expected status code 200 OK when requesting all " +
-                    "users, but got %s.", response.getStatusCode())
+                .as("Expected status code 200 OK when requesting all users, but got %s.", response.getStatusCode())
                 .isEqualTo(HttpStatus.OK);
 
-        assertThat(response.getBody())
-                .as("Expected to receive 4 users from the database, but received different amount.")
-                .hasSize(4);
+        DocumentContext context = JsonPath.parse(response.getBody());
+        int size = context.read("$.content.length()");
+        assertThat(size)
+                .as("Expected size of user list to be 4, but got %d.", size)
+                .isEqualTo(4);
+
+        JSONArray ids = context.read("$.content[*].id");
+        assertThat(ids).containsExactly(1, 2, 3, 4)
+                .as("Expected user IDs to be [1, 2, 3, 4], but got %s.", ids);
+
+        JSONArray nicknames = context.read("$.content[*].nickname");
+        assertThat(nicknames).containsExactlyInAnyOrder("nickname1", "nickname2", "nickname3", "nickname4")
+                .as("Expected nicknames to be [nickname1, nickname2, nickname3, nickname4], but got %s.", nicknames);
+    }
+
+    @Test
+    void getUsers_shouldReturn200_whenIsRequestedWithParameters() {
+        // given
+        int page = 0;
+        int size = 2;
+        String orderBy = "nickname";
+        String direction = "desc";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserController.userUri + "?page=" + page + "&size=" + size + "&orderBy=" + orderBy + "&direction=" + direction,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .as("Expected status code 200 OK when requesting users with parameters, but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+        int contentSize = context.read("$.content.length()");
+        assertThat(contentSize)
+                .as("Expected content size to be %d, but got %d.", size, contentSize)
+                .isEqualTo(size);
+
+        int pageNumber = context.read("$.page.number");
+        assertThat(pageNumber)
+                .as("Expected page number to be %d, but got %d.", page, pageNumber)
+                .isEqualTo(page);
+
+        JSONArray nicknames = context.read("$.content[*].nickname");
+        assertThat(nicknames).containsExactly("nickname4", "nickname3")
+                .as("Expected nicknames to be [nickname4, nickname3], but got %s.", nicknames);
+    }
+
+    @Test
+    void getUsers_shouldReturn200_whenIsRequestedNotExistingPage() {
+        // given
+        int page = 10;
+        int size = 10;
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserController.userUri + "?page=" + page + "&size=" + size,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .as("Expected status code 200 OK when requesting a non-existing page, but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+        int countOfElements = context.read("$.content.length()");
+        assertThat(countOfElements)
+                .as("Expected 0 elements on a non-existing page %d with size %d, but got %d.", page, size, countOfElements)
+                .isEqualTo(0);
     }
 
     @Test
@@ -309,6 +384,7 @@ class UserControllerTest {
                 .isEqualTo("User with id " + user.getId() + " not found.");
     }
 
+    @Deprecated
     @Test
     void updateUser_shouldReturn400_whenIdIsNull() {
         ChangedUser user = ChangedUser.getValidInstance();

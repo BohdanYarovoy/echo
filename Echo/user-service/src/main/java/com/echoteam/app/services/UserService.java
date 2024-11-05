@@ -2,13 +2,13 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.entities.User;
 import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface UserService {
 
-    List<User> getAll();
+    Page<User> getAll(Pageable pageable);
     User getById(Long id);
     User createUser(UserDTO user);
     User updateUser(UserDTO user);
