@@ -2,47 +2,72 @@ package com.echoteam.app.services;
 
 import com.echoteam.app.dao.UserRepository;
 import com.echoteam.app.entities.User;
-import com.echoteam.exceptions.ParameterIsNullException;
+import com.echoteam.app.entities.dto.nativeDTO.UserDTO;
+import com.echoteam.app.exceptions.ParameterIsNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import static com.echoteam.app.entities.mappers.UserMapper.INSTANCE;
 
 @RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService{
+    private final UserRepository userRepository;
 
-    UserRepository userRepository;
-
+    @Transactional
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
+    @Transactional
     @Override
-    public Optional<User> getById(Long id) {
-        return userRepository.findById(id);
+    public User getById(Long id) {
+        if (id == null)
+            throw new ParameterIsNotValidException("There is need id for user.");
+
+        var optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty())
+            throw new EntityNotFoundException(String.format("User with id %d not found.", id));
+        return optionalUser.get();
     }
 
+    @Transactional
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public User createUser(UserDTO userDto) {
+        User newUser = INSTANCE.toUserFromDTO(userDto);
+        return userRepository.save(newUser);
     }
 
+    @Transactional
     @Override
-    public User updateUser(User user) throws ParameterIsNullException {
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if (optionalUser.isPresent()) {
-            User dbUser = optionalUser.get();
-            dbUser.acceptChanges(user);
-            return userRepository.save(dbUser);
-        } else {
-            throw new EntityNotFoundException(String.format("User with id: %d not found.", user.getId()));
+    public User updateUser(UserDTO userDto) {
+        if (userDto.getId() == null)
+            throw new ParameterIsNotValidException("Id is required.");
+
+        User existingUser = getById(userDto.getId());
+        User changedUser = INSTANCE.toUserFromDTO(userDto);
+        acceptChanges(existingUser, changedUser);
+        return userRepository.save(existingUser);
+    }
+
+    private void acceptChanges(User exist, User changed) {
+        exist.setNickname(changed.getNickname());
+        exist.setRoles(changed.getRoles());
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        boolean exists = userRepository.existsById(id);
+        if (!exists) {
+            throw new EntityNotFoundException(String.format("User with id %d not found.", id));
         }
-    }
-
-    @Override
-    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
 }

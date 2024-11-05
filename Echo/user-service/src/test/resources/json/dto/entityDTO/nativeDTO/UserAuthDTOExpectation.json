@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "userId": 1,
+  "email": "example@gmail.com",
+  "password": "pass1234",
+  "created": "2000-01-01T01:01:00.000+00:00",
+  "changed": "2000-01-01T01:02:00.000+00:00",
+  "isDeleted": false
+}

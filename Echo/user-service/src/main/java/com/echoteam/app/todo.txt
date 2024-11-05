@@ -1,0 +1,27 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DATE -> 2024-09-24
+
+DONE - Make UserService (UserController)
+DONE - Make DetailService (DetailController)
+DONE - Make AuthService (AuthController)
+DONE - Make UserRoleService (UserRoleController)
+
+DONE - Make Validation for User
+DONE - Make Validation for UserDetail
+DONE - Make Validation for UserAuth
+DONE - Make Validation for UserRole
+
+DONE - Make unit-tests for User dtos
+DONE - Make unit-tests for Detail dtos
+DONE - Make unit-tests for Auth dtos
+DONE - Make unit-tests for UserRole dtos
+
+DONE - Make integration tests for UserController
+DONE - Make integration tests for UserDetailController
+DONE - Make integration tests for UserAuthController
+DONE - Make integration tests for UserRoleController
+
+DATE -> 2024-11-05
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
