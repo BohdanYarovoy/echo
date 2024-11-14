@@ -68,7 +68,6 @@ body {
 }
 
 /* Post description */
-
 .post-description {
     padding: 10px 22px;
     word-wrap: break-word;
@@ -96,7 +95,6 @@ body {
 }
 
 /* Underpost actions */
-
 .underpost-actions {
     display: flex;
     flex-direction: row;

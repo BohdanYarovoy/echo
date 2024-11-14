@@ -94,7 +94,7 @@
 					<password>123</password>
 					<schemas>public</schemas>
 					<cleanDisabled>false</cleanDisabled>
-					<locations>classpath:db/migration/main</locations>
+					<locations>classpath:db/migration</locations>
 				</configuration>
 			</plugin>
 		</plugins>

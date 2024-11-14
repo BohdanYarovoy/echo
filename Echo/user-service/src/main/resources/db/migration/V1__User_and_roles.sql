@@ -38,7 +38,7 @@ CREATE TABLE user_auths
     user_auth_id BIGSERIAL,
     user_id      INTEGER UNIQUE,
     email        VARCHAR(100) NOT NULL UNIQUE,
-    password     VARCHAR(32) NOT NULL,
+    password     VARCHAR(255) NOT NULL,
     created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     changed      TIMESTAMP,
     is_deleted   BOOLEAN   DEFAULT FALSE,

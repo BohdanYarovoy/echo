@@ -12,25 +12,18 @@ const error = document.querySelector('.error')
 
 document.addEventListener('DOMContentLoaded', function () {
     const closeButtons = document.querySelectorAll('.close-btn');
-    
+
     closeButtons.forEach(button => {
         button.addEventListener('click', function () {
-   
-            log.classList.add('hide')
-            reg.classList.add('hide')
-            overlay.classList.add('hide'); 
-            
-           
+            log.classList.add('hide');
+            reg.classList.add('hide');
+            overlay.classList.add('hide');
+            document.body.style.overflow = ''; // Відновлюємо скрол
         });
     });
 });
 
-
-
-
-
 const completeBtn = document.getElementById('login')
-
 
 function hideErrorMessages() {
     emptyLogin.classList.add('hide');
@@ -38,23 +31,16 @@ function hideErrorMessages() {
 }
 
 loginbtn.addEventListener('click', () => {
- 
     document.body.style.overflow = 'hidden';
-
     overlay.classList.remove('hide')
     log.classList.remove('hide')
     hideErrorMessages();
-    
-    
 })
 
 signUp.addEventListener('click', () => {
-
     log.classList.add('hide')
-
     reg.classList.remove('hide')
     hideErrorMessages();
-
 })
 
 logIn.addEventListener('click', () => {
@@ -63,17 +49,14 @@ logIn.addEventListener('click', () => {
     hideErrorMessages();
 })
 
-
 completeBtn.addEventListener('click', () => {
-    
     const username = document.querySelector('.inputUsername').value.trim();
     const inputPasswordLogin = document.querySelector('.inputPasswordLogin').value.trim(); // валідація логіна
-    if(username, inputPasswordLogin === ''){
+    if (username, inputPasswordLogin === '') {
         emptyLogin.classList.remove('hide')
-    }else{
+    } else {
         emptyLogin.classList.add('hide')
     }
-  
 })
 
 completeBtn2.addEventListener('click', () => {
@@ -84,19 +67,33 @@ completeBtn2.addEventListener('click', () => {
     const passwordInput = document.getElementById('password').value.trim() // валідація регістрації
     const confirmInput = document.getElementById('confirm').value.trim()
 
-    if(emailInput, usernameInput, phoneInput, passwordInput, confirmInput == ''){
+    if (emailInput, usernameInput, phoneInput, passwordInput, confirmInput == '') {
         emptyReg.classList.remove('hide')
-    }else{
+    } else {
         emptyReg.classList.add('hide')
     }
 
-    if(passwordInput !== confirmInput){
+    if (passwordInput !== confirmInput) {
         error.classList.remove('hide')
         console.log('password don`t match');
-        
-    }else{
+    } else {
         error.classList.add('hide')
     }
-    
 })
+
+function showLogin(url, document) {
+    // Зчитуємо параметри з URL
+    const parameter = url.get('loginEnabled');  // Отримуємо значення параметра 'parameter'
+    // Якщо параметр 'parameter' дорівнює '1', показуємо елемент
+    if (parameter === 'true') {
+        const log = document.querySelector('.reg');
+        const hide = document.querySelector('.hide');
+        const overlay = document.querySelector('.overlay');
+
+        if (log && hide) {
+            log.classList.remove('hide');  // Показуємо елемент
+            overlay.classList.remove('hide');
+        }
+    }
+}
 

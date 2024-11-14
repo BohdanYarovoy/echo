@@ -165,6 +165,65 @@ class UserControllerTest {
     }
 
     @Test
+    void getUserByNickname_shouldReturn200_whenItIsOK() {
+        // given
+        String nickname = "nickname1";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserController.userUri + "/userByNickname?nickname=" + nickname,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expect response status code 200 OK when it is ok, " +
+                                 "but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+                .as("Expect response body is not null, but it is.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+        String responseNickname = context.read("$.nickname");
+        assertThat(responseNickname).isEqualTo(nickname);
+    }
+
+    @Test
+    void getUserByNickname_shouldReturn404_whenThereNoExistsSuchNickname() {
+        // given
+        String nickname = "nickname200";        // there no such nickname in DB
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(
+                UserController.userUri + "/userByNickname?nickname=" + nickname,
+                String.class
+        );
+
+        // then
+        assertThat(response.getStatusCode())
+                .withFailMessage("Expect response status code 404 NOT_FOUND when nickname is null, " +
+                                 "but got %s.", response.getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody())
+                .as("Expect response body is not null, but it is.")
+                .isNotNull();
+
+        DocumentContext context = JsonPath.parse(response.getBody());
+        String errorTitle = context.read("$.body.title");
+        String expectErrorTitle = "Not Found";
+        assertThat(errorTitle)
+                .withFailMessage("Expect that error title '%s' is equal to '%s', but it isn't.", errorTitle, expectErrorTitle)
+                .isEqualTo(expectErrorTitle);
+
+        String errorDetails = context.read("$.body.detail");
+        String expectErrorDetail = "There no such user with nickname %s".formatted(nickname);
+        assertThat(errorDetails)
+                .withFailMessage("Expect that error detail '%s' is equal to '%s', but it isn't.", errorDetails, expectErrorDetail)
+                .isEqualTo(expectErrorDetail);
+    }
+
+    @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void createUser_shouldReturn201_whenIsValid() {
         CreatedUser createdUser = CreatedUser.getValidInstance();

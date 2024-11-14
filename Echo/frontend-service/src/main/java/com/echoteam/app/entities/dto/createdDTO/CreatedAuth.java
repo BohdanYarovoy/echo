@@ -19,7 +19,7 @@ public class CreatedAuth {
     @Email(message = "Incorrect email address")
     private String email;
     @NotNull(message = "Password is required")
-    @Size(min = 8, max = 255, message = "Length should be between 8-255 inclusive")
+    @Size(min = 8, max = 32, message = "Length should be between 8-32 inclusive")
     @Pattern(regexp = "^[\\S]+$", message = "Password should be without: whitespaces")
     private String password;
 

@@ -63,6 +63,7 @@ public class UserAuthController {
     public ResponseEntity<UserAuthDTO> getById(@PathVariable("id")Long id) {
         var auth = authService.getById(id);
         var authDTO = INSTANCE.toDTOFromUserAuth(auth);
+
         return ResponseEntity.ok(authDTO);
     }
 

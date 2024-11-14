@@ -1,7 +1,5 @@
 * {
     margin: 0;
-
-
 }
 
 /* 
@@ -124,20 +122,10 @@ body {
     transition: transform 0.3s ease;
 }
 
-.profile-btn {
-    background-image: url('profile-photo.jpg');
-}
-
-.message-btn {
-    background-image: url('message-icon.jpg');
-}
-
 .profile-btn:focus,
 .message-btn:focus {
     outline: none;
 }
-
-
 
 .header-btn {
     background-color: #55BFF9;
