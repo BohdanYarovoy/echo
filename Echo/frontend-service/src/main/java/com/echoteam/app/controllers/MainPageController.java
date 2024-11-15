@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping({"/web/main"})
+@RequestMapping({"/web/main", "/"})
 @RequiredArgsConstructor
 public class MainPageController {
     private final UserRepository userRepository;

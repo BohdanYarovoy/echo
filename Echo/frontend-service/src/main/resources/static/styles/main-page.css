@@ -76,7 +76,6 @@ body {
 }
 
 .post-description p {
-
     margin: 0;
 }
 
@@ -85,7 +84,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .post-photo {
