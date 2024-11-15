@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.echoteam.app.entities.mappers.UserMapper.INSTANCE;
 
 @RequiredArgsConstructor
@@ -34,6 +36,14 @@ public class UserServiceImpl implements UserService{
         if (optionalUser.isEmpty())
             throw new EntityNotFoundException(String.format("User with id %d not found.", id));
         return optionalUser.get();
+    }
+
+    @Override
+    public User getByNickname(String nickname) {
+        Optional<User> optionalUser = userRepository.findUserByNickname(nickname);
+        String errorMessage = "There no such user with nickname %s".formatted(nickname);
+
+        return optionalUser.orElseThrow(() ->  new EntityNotFoundException(errorMessage));
     }
 
     @Transactional

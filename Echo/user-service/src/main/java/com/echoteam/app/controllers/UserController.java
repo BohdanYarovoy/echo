@@ -59,7 +59,6 @@ public class UserController {
         return new PagedModel<>(userDTOS);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
         var dto = INSTANCE.toDTOFromUser(userService.getById(id));
@@ -67,6 +66,13 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/userByNickname")
+    public ResponseEntity<UserDTO> getUserByNickname(@RequestParam(name = "nickname") String nickname) {
+        var dto = INSTANCE.toDTOFromUser(userService.getByNickname(nickname));
+        dto.doRoutine();
+
+        return ResponseEntity.ok(dto);
+    }
 
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody CreatedUser user,

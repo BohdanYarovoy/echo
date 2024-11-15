@@ -10,6 +10,7 @@ public interface UserService {
 
     Page<User> getAll(Pageable pageable);
     User getById(Long id);
+    User getByNickname(String nickname);
     User createUser(UserDTO user);
     User updateUser(UserDTO user);
     void deleteById(Long id);

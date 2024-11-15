@@ -135,7 +135,7 @@ public class CreatedAuthValidationTest {
     void whenPasswordLengthIsTooLarge_thenHasConstraintViolation() {
         // given
         CreatedAuth auth = CreatedAuth.getValidInstance();
-        auth.setPassword("thatismyweryrelieblepasswordbecouseithasmanycharacters");
+        auth.setPassword("MFQWEFQGWEQYIUFOHGQWUIEFHQWHFWKQEJHFIQWUEYHFQWfdjsaffdwsfjkhqwekjrhflqwejhfwejkqhfjfhweqlkjfhwqkejfhMFQWEFQGWEQYIUFOHGQWUIEFHQWHFWKQEJHFIQWUEYHFQWfdjsaffdwsfjkhqwekjrhflqwejhfwejkqhfjfhweqlkjfhwqkejfhMFQWEFQGWEQYIUFOHGQWUIEFHQWHFWKQEJHFIQWUEYHFQfdjshalfjhsadf;ldsakf");
 
         // when
         Set<ConstraintViolation<CreatedAuth>> violations = validator.validate(auth);

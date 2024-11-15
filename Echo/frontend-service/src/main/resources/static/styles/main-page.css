@@ -68,7 +68,6 @@ body {
 }
 
 /* Post description */
-
 .post-description {
     padding: 10px 22px;
     word-wrap: break-word;
@@ -77,7 +76,6 @@ body {
 }
 
 .post-description p {
-
     margin: 0;
 }
 
@@ -86,7 +84,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .post-photo {
@@ -96,7 +93,6 @@ body {
 }
 
 /* Underpost actions */
-
 .underpost-actions {
     display: flex;
     flex-direction: row;

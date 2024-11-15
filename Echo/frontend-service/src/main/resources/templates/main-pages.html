@@ -2,173 +2,109 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../static/images/Echo-logo.svg">
-    <title>Echo</title>
-    <link rel="stylesheet" href="../static/styles/shlyapa.css">
-    <link rel="stylesheet" href="../static/styles/main-pages.css">
-    <link rel="stylesheet" href="../static/styles/login_form.css">
-    <link rel="stylesheet" href="../static/styles/register_style.css">
+		<title>Echo</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" th:href="@{/styles/main-page.css}">
 </head>
+
 
 <body>
 
-    
+<header class="main-header" th:insert="~{fragments/shlyapa :: #headerFragment}"></header>
 
-    <header class="main-header ">
+<main>
+		<div class="posts-container">
+				<div class="post">
+						<div class="post-header">
+								<div class="post-user-name">
+										<img class="user-icon" src="/images/user-icon.svg" alt="user-icon">
+										<h3 class="user-name">User_Name228</h3>
+								</div>
+								<button class="follow-button">Follow +</button>
+						</div>
+						<div class="post-description">
+								<p>description description description description description description description description
+										description description description description description description</p>
+						</div>
+						<div class="postcontent">
 
-        <div class="overlay hide"> <!-- Full-screen overlay -->
-            <div id="register" class="reg-reg hide">
-                <div class="head ">
-                    <span class="close-btn" id="closeForm">&times;</span>
-                    <h2>Sign up</h2>
-                </div>
-                <div class="main">
-                    <input id="usernameReg" type="text" placeholder="enter username...">
-                    <input id="email" type="email" placeholder="enter your email...">
-                    <input id="phone" type="phone" placeholder="enter your phone...">
-                    <input id="password" type="password" placeholder="enter password...">
-                    <input id="confirm" type="password" placeholder="confirm password...">
-                    <h4 class="emptyReg hide">the field is empty</h4>
-                    <p class="error hide" style="color: red; text-align: left; width: 70%;">passwords don't match</p>
+								<img class="post-photo" src="/images/Bodya.webp" alt="Bodya-with-car">
+						</div>
+						<div class="underpost-actions">
+								<button class="action-button">
+										<img src="/images/like-icon.svg" alt="like-icon">
+										<span>Like</span>
+								</button>
+								<button class="action-button">
+										<img src="/images/comments-icon.svg" alt="comments-icon">
+										<span>Comments</span>
+								</button>
+						</div>
+				</div>
+				<div class="post">
+						<div class="post-header">
+								<div class="post-user-name">
+										<img class="user-icon" src="/images/user-icon.svg" alt="user-icon">
+										<h3 class="user-name">User_Name228</h3>
+								</div>
+								<button class="follow-button">Follow +</button>
+						</div>
+						<div class="post-description">
+								<p>description description description description description description description description
+										description description description description description description</p>
+						</div>
+						<div class="postcontent">
 
-                    <button id="signup" class="signup">Sign up</button>
+								<img class="post-photo" src="/images/Bodya.webp" alt="Bodya-with-car">
+						</div>
+						<div class="underpost-actions">
+								<button class="action-button">
+										<img src="/images/like-icon.svg" alt="like-icon">
+										<span>Like</span>
+								</button>
+								<button class="action-button">
+										<img src="/images/comments-icon.svg" alt="comments-icon">
+										<span>Comments</span>
+								</button>
+						</div>
+				</div>
+				<div class="post">
+						<div class="post-header">
+								<div class="post-user-name">
+										<img class="user-icon" src="/images/user-icon.svg" alt="user-icon">
+										<h3 class="user-name">User_Name228</h3>
+								</div>
+								<button class="follow-button">Follow +</button>
+						</div>
+						<div class="post-description">
+								<p>description description description description description description description description
+										description description description description description description</p>
+						</div>
+						<div class="postcontent">
 
-                    <h4>Do you have an account?  <span id="log-in">Log in</span></h4>
-                </div>
-            </div>
-        </div>
+								<img class="post-photo" src="/images/Bodya.webp" alt="Bodya-with-car">
+						</div>
+						<div class="underpost-actions">
+								<button class="action-button">
+										<img src="/images/like-icon.svg" alt="like-icon">
+										<span>Like</span>
+								</button>
+								<button class="action-button">
+										<img src="/images/comments-icon.svg" alt="comments-icon">
+										<span>Comments</span>
+								</button>
+						</div>
+				</div>
+		</div>
+</main>
 
+<script src="/scripts/login-script.js"></script>
+<script>
+		window.onload = function () {
+				showLogin(new URLSearchParams(window.location.search), document);
+		};
+</script>
 
-
-
-
-        <div id="register" class="reg hide">
-            <div class="head ">
-                <span class="close-btn" id="closeForm">&times;</span>
-                <h2>Log in</h2>
-            </div>
-            <div class="main">
-                <input id="username" class="inputUsername" type="text" placeholder="enter username...">
-
-                <input id="passwordLogin" class="inputPasswordLogin" type="password" placeholder="enter password...">
-
-                <h4 class="emptyLogin hide">the field is empty</h4>
-                <button id="login" class="signup">Log In</button>
-
-                <h4>Don't have an account?  <span id="sign-up">Sign up</span></h4>
-            </div>
-        </div>
-
-        </div>
-        <div class="container">
-            <div class="logo-search">
-                <a href="main-pages.html"><img src="../static/images/logo.png" width="90px" alt="Logo"></a>
-
-                <div class="search-wrapper">
-                    <input type="text" placeholder="Search..." class="search-input">
-                </div>
-
-            </div>
-            <div class="header-actions">
-                <a class="message-btn"><img src="../static/images/Message icon.png" alt="Message Button"
-                        width="66px" height="55px"></a>
-                        
-                        <a href="home-page.html" class="profile-btn"><img src="../static/images/Profile icon.png" alt="Profile Button"
-                        width="46px" height="55px"></a>
-                    
-                <button class="header-btn " hidden>Log Out</button>
-                <button class="login-btn header-btn">Log In</button>
-            </div>
-        </div>
-    </header>
-    <main>
-        <div class="posts-container">
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-user-name">
-                        <img class="user-icon" src="..//static/images/user-icon.svg" alt="user-icon">
-                        <h3 class="user-name">User_Name228</h3>
-                    </div>
-                    <button class="follow-button">Follow +</button>
-                </div>
-                <div class="post-description">
-                    <p>description description description description description description description description
-                        description description description description description description</p>
-                </div>
-                <div class="postcontent">
-
-                    <img class="post-photo" src="../static/images/Bodya.webp" alt="Bodya-with-car">
-                </div>
-                <div class="underpost-actions">
-                    <button class="action-button">
-                        <img src="../static/images/like-icon.svg" alt="like-icon">
-                        <span>Like</span>
-                    </button>
-                    <button class="action-button">
-                        <img src="../static/images/comments-icon.svg" alt="comments-icon">
-                        <span>Comments</span>
-                    </button>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-user-name">
-                        <img class="user-icon" src="..//static/images/user-icon.svg" alt="user-icon">
-                        <h3 class="user-name">User_Name228</h3>
-                    </div>
-                    <button class="follow-button">Follow +</button>
-                </div>
-                <div class="post-description">
-                    <p>description description description description description description description description
-                        description description description description description description</p>
-                </div>
-                <div class="postcontent">
-
-                    <img class="post-photo" src="../static/images/Bodya.webp" alt="Bodya-with-car">
-                </div>
-                <div class="underpost-actions">
-                    <button class="action-button">
-                        <img src="../static/images/like-icon.svg" alt="like-icon">
-                        <span>Like</span>
-                    </button>
-                    <button class="action-button">
-                        <img src="../static/images/comments-icon.svg" alt="comments-icon">
-                        <span>Comments</span>
-                    </button>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-user-name">
-                        <img class="user-icon" src="..//static/images/user-icon.svg" alt="user-icon">
-                        <h3 class="user-name">User_Name228</h3>
-                    </div>
-                    <button class="follow-button">Follow +</button>
-                </div>
-                <div class="post-description">
-                    <p>description description description description description description description description
-                        description description description description description description</p>
-                </div>
-                <div class="postcontent">
-
-                    <img class="post-photo" src="../static/images/Bodya.webp" alt="Bodya-with-car">
-                </div>
-                <div class="underpost-actions">
-                    <button class="action-button">
-                        <img src="../static/images/like-icon.svg" alt="like-icon">
-                        <span>Like</span>
-                    </button>
-                    <button class="action-button">
-                        <img src="../static/images/comments-icon.svg" alt="comments-icon">
-                        <span>Comments</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-    <script src="../static/script/login-script.js"></script>
 </body>
-
 </html>
