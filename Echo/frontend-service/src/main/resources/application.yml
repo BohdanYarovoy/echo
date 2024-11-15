@@ -1,3 +1,14 @@
 server:
   port: 8080
 
+logging:
+  level:
+    org.springframework.security:
+
+#### SERVICES
+service:
+  user-service:
+    url:
+      basic: http://localhost:8081/api/v1
+      user: /users
+      auth: ${service.user-service.url.user}/auths
