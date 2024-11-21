@@ -1,0 +1,114 @@
+:root {
+    --color-primary-dark: #0D637D;
+    --color-primary-white: #ffffff;
+    --color-secondary-data: #BFBFBF;
+    --color-secondary-dark: #000000;
+    --color-brand: #41BDFF;
+}
+
+.footer {
+    padding: 26px 140px;
+    background-color: var(--color-primary-dark);
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.footer_container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.footer_logo {
+    display: flex;
+    align-items: center;
+}
+
+.footer_link {
+    color: var(--color-primary-white);
+    text-decoration: none;
+    margin-bottom: 18px;
+    transition: color 0.3s
+}
+
+.footer_link:hover {
+    color: var(--color-brand);
+}
+
+.footer_info,
+.footer_contacts,
+.footer_privacy_and_buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer_contacts_icons {
+    display: flex;
+    gap: 24px;
+}
+
+.footer_contacts_icons svg {
+    fill: var(--color-primary-white);
+    transition: fill 0.3s;
+}
+
+.footer_contacts_icons svg:hover {
+    cursor: pointer;
+    fill: var(--color-brand);
+}
+
+.privacy {
+    margin-bottom: 12px;
+}
+
+.data_protected {
+    color: var(--color-secondary-data);
+    margin: 8px 0 0;
+}
+
+.download_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.download_button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    color: var(--color-secondary-dark);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.download_button_descr {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.google_play_header {
+    font-weight: 700;
+}
+
+.get_it {
+    font-weight: 400;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.download_on {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 100%;
+}
+
+.app_store_header {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+}
