@@ -1,0 +1,126 @@
+.register_container {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    height: auto; 
+    padding: 10px 80px; 
+    background-image: url(../images/authbackground.png);
+    background-size: cover; /* Розтягнути зображення на весь екран */
+
+
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 50px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); 
+    z-index: 2;
+}
+
+
+.register_container span {
+    color: white;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    font-size: 48px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    width: 40px; 
+    height: 40px; 
+    cursor: pointer;
+    border-radius: 50%; 
+}
+
+.register_container span:hover {
+    background-color: #f0f0f0;
+    color: #004E89; 
+}
+
+.registerText {
+    margin-bottom: 50px;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    font-size: xxx-large;
+}
+
+.register_container input {
+    width: 280px;
+    margin: 10px;
+    padding: 20px 30px; 
+    border-radius: 50px;
+    border: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.25);
+    font-size: 16px;
+    color: white;
+    outline: none;
+}
+
+.register_container input:focus {
+    background-color: #ffffff;
+    color: black;
+    box-shadow: black;
+}
+
+.register_container input::placeholder {
+    text-align: left; 
+    color: rgba(255, 255, 255, 0.7); 
+    font-size: 16px;
+}
+
+
+.register_form_btn{
+    margin-top: 100px;
+    padding: 20px 100px;
+    border-radius: 20px;
+    border: none;
+    color: #41BDFF;
+    font-size: large;
+    cursor: pointer;
+}
+
+.register_form_btn:hover{
+    background-color: #eaf6ff;
+    color: #41BDFF;
+}
+
+.register_noacc{
+    color: white;
+}
+
+.register_noacc h{
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.register_background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1; 
+}
+
+.hide{
+    display: none;
+}
+
+.register_container input {
+    position: relative; /* Встановлюємо контекст позиціонування */
+}
+
+.registerError {
+    position: absolute;
+    left: 100px; /* Вирівнюємо по лівій стороні інпуту */
+    bottom: 190px; 
+    font-size: 14px;
+    color: red;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
