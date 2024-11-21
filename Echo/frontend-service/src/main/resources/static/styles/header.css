@@ -1,44 +1,38 @@
-body {
-    background: url(../images/background.png);
-    background-color: var(--color-primary-light);
-    background-repeat: repeat;
-    margin: 0 auto;
-}
-
 .header_container {
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
     padding: 15px 8%;
-    gap: 120px; /* Reduced gap between items */
+    gap: 120px;
+    /* Reduced gap between items */
     background-color: rgba(203, 241, 248, 0.3);
     backdrop-filter: blur(10px);
     color: white;
     position: fixed;
     width: 100%;
-    box-sizing: border-box; 
-   
+    box-sizing: border-box;
+    z-index: 50;
 }
 
 .header_search {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     border-radius: 30px;
 }
 
-.header_img{
+.header_img {
     cursor: pointer;
 }
 
 .header_input {
     background-color: #41BDFF;
-    width: 100%; 
+    width: 100%;
     max-width: 250px;
-    height: 40px; 
-    padding: 0 35px 0 10px; 
-    border-radius: 15px; 
+    height: 40px;
+    padding: 0 35px 0 10px;
+    border-radius: 15px;
     font-size: 16px;
     border: none;
     outline: none;
@@ -46,9 +40,9 @@ body {
 }
 
 .header_input::placeholder {
-    color: #004E89; 
-    opacity: 0.8; 
-    font-style: italic; 
+    color: #004E89;
+    opacity: 0.8;
+    font-style: italic;
 }
 
 .header_input_img {
@@ -63,17 +57,17 @@ body {
 
 
 .header_buttons {
-    margin-left: auto; 
+    margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 80px; 
-    justify-content: flex-end; 
+    gap: 80px;
+    justify-content: flex-end;
     cursor: pointer;
 
 }
 
 .header_login {
-    margin-left: 30px; 
+    margin-left: 30px;
     background-color: #41BDFF;
     padding: 13px 65px;
     border: none;
@@ -84,8 +78,8 @@ body {
 
 }
 
-.header_register{
-    margin-left: 30px; 
+.header_register {
+    margin-left: 30px;
     background-color: #41BDFF;
     padding: 13px 65px;
     border: none;
@@ -96,5 +90,5 @@ body {
 }
 
 .header_img {
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
