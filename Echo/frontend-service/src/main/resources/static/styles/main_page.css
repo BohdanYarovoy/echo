@@ -35,6 +35,10 @@
     margin-top: 120px;
 }
 
+.post:last-child {
+    margin-bottom: 16px;
+}
+
 /* Post Header */
 .post_header {
     display: flex;

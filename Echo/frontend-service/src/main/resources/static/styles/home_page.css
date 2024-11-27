@@ -28,13 +28,15 @@
 .user_info_container {
     position: fixed;
     left: calc(50% - 33.33% + 20px);
-    top: 47%;
+    top: 55%;
+    /* Збільшуємо значення, щоб змістити контейнер вниз */
     transform: translate(-50%, -50%);
+    /* Це буде зберігати позиціонування по центру, але з урахуванням нової висоти */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     max-width: 430px;
-    padding: 26px 34px 10px;
+    padding: 26px 30px 12px;
     background-color: var(--color-secondary-light);
     border-radius: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
@@ -71,7 +73,7 @@
 
 .user_nick_name {
     font-size: 30px;
-    margin-top: 14px;
+    margin: 8px 0;
 }
 
 /* User information */
@@ -132,15 +134,18 @@
 /* Posts and button container */
 
 .posts_and_button_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     margin-top: 100px;
+    width: 66.67%;
 }
 
 /* Add post button */
 
 .add_post_button {
-    display: block;
-    margin: 0 auto;
-    padding: 16px 158px;
+    padding: 16px 150px;
     background-color: var(--color-brand);
     color: var(--color-secondary-light);
     font-weight: 400;
@@ -179,7 +184,6 @@
 .user_post:first-child {
     margin-top: 20px;
 }
-
 
 .user_post:last-child {
     margin-bottom: 16px;
