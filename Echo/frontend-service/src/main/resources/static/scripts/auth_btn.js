@@ -41,35 +41,65 @@ closeBtnLogin.addEventListener('click', () => {
 
 
 // errorMessage
+// Login form handling
 loginFormBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    
+
     const inputs = document.querySelectorAll('.loginInput'); 
     let hasError = false;
 
+    // Перевіряємо всі поля
     inputs.forEach((input) => {
         if (input.value.trim() === '') { 
-            loginError.classList.remove('hide'); 
             hasError = true;
-        } else {
-            loginError.classList.add('hide'); 
         }
     });
 
-    if (!hasError) {
+    // Відображаємо помилку, якщо є незаповнені поля
+    if (hasError) {
+        loginError.classList.remove('hide'); 
+    } else {
+        loginError.classList.add('hide'); 
         blackBackground.classList.add('hide');
         loginContainer.classList.add('hide');
 
-       
+        // Очищаємо поля після успішного входу
         inputs.forEach((input) => {
             input.value = '';  
         });
     }
 });
 
-// register
+// Register form handling
+registerFormBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    
+    const inputs = document.querySelectorAll('.registerInput'); 
+    let hasError = false;
 
+    // Перевіряємо всі поля
+    inputs.forEach((input) => {
+        if (input.value.trim() === '') { 
+            hasError = true;
+        }
+    });
 
+    // Відображаємо помилку, якщо є незаповнені поля
+    if (hasError) {
+        registerError.classList.remove('hide'); 
+    } else {
+        registerError.classList.add('hide'); 
+        blackBackground.classList.add('hide');
+        registerContainer.classList.add('hide');
+
+        // Очищаємо поля після успішної реєстрації
+        inputs.forEach((input) => {
+            input.value = '';  
+        });
+    }
+});
+
+// Header Register button handling
 headerRegister.addEventListener('click', (event) => {
     event.preventDefault(); 
     defaultSetting2 = !defaultSetting2; 
@@ -77,7 +107,7 @@ headerRegister.addEventListener('click', (event) => {
 });
 
 function hideHandler2() {
-    if (defaultSetting2 === false) {
+    if (!defaultSetting2) {
         blackBackground.classList.remove('hide');
         registerContainer.classList.remove('hide');
     } else {
@@ -91,48 +121,28 @@ closeBtnRegister.addEventListener('click', () => {
     hideHandler2(); 
 });
 
-// errorMessage
-registerFormBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    
-    const inputs = document.querySelectorAll('.registerInput'); 
-    let hasError = false;
+// Switching between login and register
+const signUp = document.querySelector('.sign_up');
+const logIn = document.querySelector('.log_in');
 
-    inputs.forEach((input) => {
-        if (input.value.trim() === '') { 
-            registerError.classList.remove('hide'); 
-            hasError = true;
-        } else {
-            registerError.classList.add('hide'); 
-        }
-    });
-
-    if (!hasError) {
-        blackBackground.classList.add('hide');
-        registerContainer.classList.add('hide');
-
-       
-        inputs.forEach((input) => {
-            input.value = '';  
-        });
-    }
+// Переход з логіну до реєстрації
+signUp.addEventListener('click', () => {
+    clearInputs('.loginInput'); // Очищаємо поля форми логіну
+    loginContainer.classList.add('hide');
+    registerContainer.classList.remove('hide');       
 });
 
-
-
-const signUp = document.querySelector('.sign_up')
-const logIn = document.querySelector('.log_in')
-
-signUp.addEventListener('click', () => {
-        loginContainer.classList.add('hide');
-        registerContainer.classList.remove('hide');       
-})
-
+// Переход з реєстрації до логіну
 logIn.addEventListener('click', () => {
-    loginContainer.classList.remove('hide');
-    registerContainer.classList.add('hide');       
-})
+    clearInputs('.registerInput'); // Очищаємо поля форми реєстрації
+    registerContainer.classList.add('hide');
+    loginContainer.classList.remove('hide');       
+});
 
-
-
-
+// Функція для очищення полів
+function clearInputs(selector) {
+    const inputs = document.querySelectorAll(selector);
+    inputs.forEach((input) => {
+        input.value = '';
+    });
+}

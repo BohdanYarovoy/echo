@@ -41,6 +41,28 @@
     z-index: 2;
 }
 
+.user_description {
+    max-width: 300px; /* Обмеження ширини */
+    word-wrap: break-word; /* Перенос слів */
+    overflow-wrap: break-word;
+    white-space: pre-wrap; /* Зберігаємо пробіли */
+    margin-bottom: 10px;
+}
+
+.user_edit_button {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.user_edit_button:hover {
+    background-color: #0056b3;
+}
+
+
 /* User avatar and nick name */
 
 .user_avatar_nick_name {
