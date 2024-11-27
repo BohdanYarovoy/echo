@@ -17,7 +17,6 @@ import java.util.Objects;
 public class UserDTO {
     private Long id;
     private String nickname;
-    private byte[] avatar;
     private Timestamp created;
     private Timestamp changed;
     private Boolean isDeleted;
