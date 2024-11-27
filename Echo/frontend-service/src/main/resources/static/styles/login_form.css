@@ -4,7 +4,7 @@ body.no-scroll {
 }
 
 .login_container {
-    position: absolute;
+    position: fixed;
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
@@ -106,7 +106,7 @@ body.no-scroll {
 .black_background{
     position: absolute;
     background-color: rgb(29, 28, 28, 0.75);
-    height: 100vh; /* Займає висоту екрану */
+    height: 1200%; /* Займає висоту екрану */
     width: 100%; /* Займає всю ширину екрану */
     top: 0;
     left: 0;
