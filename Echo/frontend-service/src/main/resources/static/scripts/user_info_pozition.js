@@ -1,17 +1,30 @@
-document.addEventListener('scroll', () => {
-  const userContainer = document.querySelector('.user_info_container');
-  const footer = document.querySelector('.footer');
+document.addEventListener("DOMContentLoaded", function () {
+    const userInfoContainer = document.querySelector(".user_info_container");
+    const footer = document.querySelector(".footer"); // Клас футера
+    const initialTop = userInfoContainer.getBoundingClientRect().top; // Початкова позиція блоку (відстань від верхньої межі сторінки)
+    const containerHeight = userInfoContainer.offsetHeight; // Висота блоку
+    const distanceToFooter = 20; // Відстань до футера
 
-  const footerRect = footer.getBoundingClientRect(); // Позиція футера
-  const containerHeight = userContainer.offsetHeight; // Висота контейнера
-  const viewportHeight = window.innerHeight; // Висота вікна браузера
-  const offset = 16; // Відстань між футером і контейнером у пікселях
+    document.addEventListener("scroll", function () {
+        const scrollPosition = window.scrollY; // Поточна позиція скролу
+        const footerTop = footer.getBoundingClientRect().top + scrollPosition; // Верх футера відносно документа
+        const maxTop = footerTop - containerHeight - distanceToFooter; // Максимальне місце, де блок може перебувати перед футером
 
-  // Перевіряємо, чи футер видно у вікні браузера
-  if (footerRect.top < viewportHeight) {
-    const overlap = viewportHeight - footerRect.top + offset; // Розрахунок з урахуванням відступу
-    userContainer.style.transform = `translate(-50%, calc(-50% - ${overlap}px))`;
-  } else {
-    userContainer.style.transform = 'translate(-50%, -50%)'; // Центруємо контейнер
-  }
+        if (scrollPosition + initialTop + containerHeight + distanceToFooter >= footerTop) {
+            // Блок досягає футера і зупиняється
+            userInfoContainer.style.position = "absolute";
+            userInfoContainer.style.top = `${maxTop}px`;
+            userInfoContainer.style.transform = "translate(calc(-50% - 440px), 0)";
+        } else if (scrollPosition <= initialTop) {
+            // Повернення блоку до початкової позиції
+            userInfoContainer.style.position = "fixed";
+            userInfoContainer.style.top = `${initialTop}px`;
+            userInfoContainer.style.transform = "translate(calc(-50% - 440px), 0)";
+        } else {
+            // Блок скролиться разом зі сторінкою
+            userInfoContainer.style.position = "absolute";
+            userInfoContainer.style.top = `${scrollPosition + initialTop}px`;
+            userInfoContainer.style.transform = "translate(calc(-50% - 440px), 0)";
+        }
+    });
 });
