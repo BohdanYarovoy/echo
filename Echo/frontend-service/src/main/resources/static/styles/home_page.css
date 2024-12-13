@@ -19,35 +19,63 @@
 
 .home_page_container {
     display: flex;
-    justify-content: flex-end;
-    padding: 0 60px;
+    justify-content: center;
+    padding-top: 120px;
 }
 
 /* User information container */
 
 .user_info_container {
     position: fixed;
-    left: calc(50% - 33.33% + 20px);
-    top: 55%;
-    /* Збільшуємо значення, щоб змістити контейнер вниз */
-    transform: translate(-50%, -50%);
-    /* Це буде зберігати позиціонування по центру, але з урахуванням нової висоти */
+    top: 57%;
+    left: 50%;
+    transform: translate(calc(-50% - 440px), -50%);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     max-width: 430px;
-    padding: 26px 30px 12px;
+    padding: 26px 30px 18px;
     background-color: var(--color-secondary-light);
     border-radius: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
-    z-index: 2;
+    box-shadow: 0 0 16px rgba(51, 51, 51, 0.25);
+    transition: box-shadow 0.3s ease;
+    /* Плавність для тіні */
 }
 
+.user_info_container.shadow-top {
+    box-shadow: 0 -40px 30px rgba(0, 238, 255, 0.4);
+    /* Більша тінь зверху, менше розсіювання, мінімальна тінь по боках */
+}
+
+.user_info_container.shadow-bottom {
+    box-shadow: 0 40px 30px rgba(0, 238, 255, 0.4);
+    /* Більша тінь знизу, менше розсіювання, мінімальна тінь по боках */
+}
+
+@media (min-width: 1850px) {
+    .user_info_container {
+        top: 48%;
+    }
+}
+
+/* Posts and button container */
+
+.posts_and_button_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 420px;
+}
+
+
 .user_description {
-    max-width: 300px; /* Обмеження ширини */
-    word-wrap: break-word; /* Перенос слів */
+    max-width: 300px;
+    /* Обмеження ширини */
+    word-wrap: break-word;
+    /* Перенос слів */
     overflow-wrap: break-word;
-    white-space: pre-wrap; /* Зберігаємо пробіли */
+    white-space: pre-wrap;
+    /* Зберігаємо пробіли */
     margin-bottom: 10px;
 }
 
@@ -131,15 +159,8 @@
     vertical-align: middle;
 }
 
-/* Posts and button container */
-
 .posts_and_button_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 100px;
-    width: 66.67%;
+    margin-bottom: 36px;
 }
 
 /* Add post button */
@@ -185,9 +206,7 @@
     margin-top: 20px;
 }
 
-.user_post:last-child {
-    margin-bottom: 16px;
-}
+
 
 /* User post Header */
 
