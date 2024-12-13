@@ -36,8 +36,9 @@ public class UserAvatarServiceImpl implements UserAvatarService {
     @Override
     public AvatarDTO getAvatarById(Long userId) {
         User user = userService.getById(userId);
-        if (user.getAvatar() == null)
+        if (user.getAvatar() == null) {
             throw new EntityNotFoundException("User %s dont have any avatar.".formatted(user.getNickname()));
+        }
 
         Optional<Avatar> avatarById = avatarRepository.findById(user.getAvatar().getId());
         try {
@@ -50,7 +51,7 @@ public class UserAvatarServiceImpl implements UserAvatarService {
                 }
                 return dto;
             } else {
-                throw new EntityNotFoundException("Avatar with id:%s not found.".formatted(userId));
+                throw new EntityNotFoundException("Avatar with id:%s could not be processed, please try again.".formatted(userId));
             }
         } catch (IOException e) {
             throw new SomethingWrongException("The file could not be read, please try again.");
@@ -60,8 +61,6 @@ public class UserAvatarServiceImpl implements UserAvatarService {
     @Transactional
     @Override
     public void saveAvatar(Long userId, MultipartFile avatar) {
-        validateMultipartFile(avatar);
-
         User user = userService.getById(userId);
         Avatar userAvatar = user.getAvatar() == null
                 ? createAvatar(avatar, user)
@@ -76,7 +75,7 @@ public class UserAvatarServiceImpl implements UserAvatarService {
     }
 
     private void validateMultipartFile(MultipartFile avatar) {
-        if (avatar.isEmpty())
+        if (avatar.isEmpty() || avatar == null)
             throw new ParameterIsNotValidException("Avatar is null.");
 
         String contentType = avatar.getContentType();

@@ -40,8 +40,8 @@ public class UserAvatarController {
         return new ModelAndView("image-get-form");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getAvatarByUserId(@PathVariable(value = "id") Long userId) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<byte[]> getAvatarByUserId(@PathVariable(value = "userId") Long userId) {
         AvatarDTO avatarById = avatarService.getAvatarById(userId);
 
         HttpHeaders headers = new HttpHeaders();
@@ -61,17 +61,17 @@ public class UserAvatarController {
         avatarService.saveAvatar(userId, avatar);
 
         URI location = uriBuilder
-                .replacePath(avatarUri + "/{id}")
-                .buildAndExpand(Map.of("id", userId))
+                .replacePath(avatarUri + "/{userId}")
+                .buildAndExpand(Map.of("userId", userId))
                 .toUri();
         return ResponseEntity.noContent()
                 .location(location)
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAvatar(@PathVariable(value = "id") Long id) {
-        avatarService.deleteAvatar(id);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteAvatar(@PathVariable(value = "userId") Long userId) {
+        avatarService.deleteAvatar(userId);
 
         return ResponseEntity.noContent().build();
     }

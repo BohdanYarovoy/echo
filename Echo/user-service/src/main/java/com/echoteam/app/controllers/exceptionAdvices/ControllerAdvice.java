@@ -24,7 +24,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(value = SomethingWrongException.class)
     public ResponseEntity<ErrorResponse> handelSomethingWrongExtension(SomethingWrongException ex) {
-        var errorResponse = ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage()).build();
+        var errorResponse = ErrorResponse.builder(ex, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage()).build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
 

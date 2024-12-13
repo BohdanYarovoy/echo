@@ -6,10 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static com.echoteam.app.utils.PathUtilities.getClasspath;
 
 @Service
 public class FileManagerServiceImpl implements FileManagerService {
@@ -46,11 +47,4 @@ public class FileManagerServiceImpl implements FileManagerService {
         Files.delete(absolute);
     }
 
-    private Path getClasspath() {
-        URL resource = getClass().getClassLoader().getResource("");
-        if (resource == null) {
-            throw new IllegalStateException("Classpath root could not be found.");
-        }
-        return Path.of(resource.getPath());
-    }
 }

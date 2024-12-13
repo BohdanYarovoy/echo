@@ -397,10 +397,9 @@ class UserControllerTest {
         assertThat(user.getRoles())
                 .as("Expect that roles will be that same, because it changes only nickname.")
                 .hasSameElementsAs(before.getRoles());
-// todo: refactor test with new changes (avatar)
-//        assertThat(after.getAvatar())
-//                .as("Expect that avatars will be that same, because it changes only nickname.")
-//                .isEqualTo(before.getAvatar());
+        assertThat(after.getAvatar())
+                .as("Expect that avatars will be that same, because it changes only nickname.")
+                .isEqualTo(before.getAvatar());
         assertThat(after.getCreated())
                 .as("Expect that created data will be that same, because it changes only nickname.")
                 .isEqualTo(before.getCreated());
