@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const footer = document.querySelector(".footer");
     const initialTop = userInfoContainer.getBoundingClientRect().top;
     const containerHeight = userInfoContainer.offsetHeight;
-    const distanceToFooter = 20;
+    const distanceToFooter = 36;
     let lastScrollY = window.scrollY; // Для збереження попередньої позиції скролу
     let scrollTimeout; // Таймер для обробки зупинки скролу
 

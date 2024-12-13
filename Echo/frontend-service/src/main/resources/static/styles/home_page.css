@@ -27,7 +27,7 @@
 
 .user_info_container {
     position: fixed;
-    top: 55%;
+    top: 57%;
     left: 50%;
     transform: translate(calc(-50% - 440px), -50%);
     display: flex;
@@ -36,24 +36,24 @@
     padding: 26px 30px 18px;
     background-color: var(--color-secondary-light);
     border-radius: 20px;
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 16px rgba(51, 51, 51, 0.25);
     transition: box-shadow 0.3s ease;
     /* Плавність для тіні */
 }
 
 .user_info_container.shadow-top {
-    box-shadow: -20px -60px 30px rgba(0, 238, 255, 0.4);
+    box-shadow: 0 -40px 30px rgba(0, 238, 255, 0.4);
     /* Більша тінь зверху, менше розсіювання, мінімальна тінь по боках */
 }
 
 .user_info_container.shadow-bottom {
-    box-shadow: 20px 60px 30px rgba(0, 238, 255, 0.4);
+    box-shadow: 0 40px 30px rgba(0, 238, 255, 0.4);
     /* Більша тінь знизу, менше розсіювання, мінімальна тінь по боках */
 }
 
 @media (min-width: 1850px) {
     .user_info_container {
-        top: 43%;
+        top: 48%;
     }
 }
 
@@ -159,7 +159,9 @@
     vertical-align: middle;
 }
 
-
+.posts_and_button_container {
+    margin-bottom: 36px;
+}
 
 /* Add post button */
 
@@ -204,9 +206,7 @@
     margin-top: 20px;
 }
 
-.user_post:last-child {
-    margin-bottom: 16px;
-}
+
 
 /* User post Header */
 
