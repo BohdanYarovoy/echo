@@ -112,7 +112,7 @@
 .registerError {
     position: absolute;
     left: 100px;
-    bottom: 190px;
+    bottom: 140px;
     font-size: 14px;
     color: red;
 }
