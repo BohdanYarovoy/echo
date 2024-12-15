@@ -26,11 +26,13 @@ headerLogin.addEventListener('click', (event) => {
 
 function hideHandler() {
     if (defaultSetting === false) {
+        document.body.classList.add('no-scroll'); // Додаємо клас до body
         blackBackground.classList.remove('hide');
         loginContainer.classList.remove('hide');
     } else {
         blackBackground.classList.add('hide');
         loginContainer.classList.add('hide');
+        document.body.classList.remove('no-scroll'); // Додаємо клас до body
     }
 }
 
@@ -61,6 +63,7 @@ loginFormBtn.addEventListener('click', (event) => {
     } else {
         loginError.classList.add('hide'); 
         blackBackground.classList.add('hide');
+        document.body.classList.remove('no-scroll'); // Додаємо клас до body
         loginContainer.classList.add('hide');
 
         // Очищаємо поля після успішного входу
@@ -89,6 +92,7 @@ registerFormBtn.addEventListener('click', (event) => {
         registerError.classList.remove('hide'); 
     } else {
         registerError.classList.add('hide'); 
+        document.body.classList.remove('no-scroll'); // Додаємо клас до body
         blackBackground.classList.add('hide');
         registerContainer.classList.add('hide');
 
@@ -108,11 +112,13 @@ headerRegister.addEventListener('click', (event) => {
 
 function hideHandler2() {
     if (!defaultSetting2) {
+        document.body.classList.add('no-scroll'); // Додаємо клас до body
         blackBackground.classList.remove('hide');
         registerContainer.classList.remove('hide');
     } else {
         blackBackground.classList.add('hide');
         registerContainer.classList.add('hide');
+        document.body.classList.remove('no-scroll'); // Додаємо клас до body
     }
 }
 
@@ -129,7 +135,8 @@ const logIn = document.querySelector('.log_in');
 signUp.addEventListener('click', () => {
     clearInputs('.loginInput'); // Очищаємо поля форми логіну
     loginContainer.classList.add('hide');
-    registerContainer.classList.remove('hide');       
+    registerContainer.classList.remove('hide');   
+        
 });
 
 // Переход з реєстрації до логіну
