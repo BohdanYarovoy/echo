@@ -1,4 +1,4 @@
-.editor-modal-descr {
+.editor_modal_redactive {
     display: flex;
     position: fixed;
     top: 0;
@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.editor-modal-descr::before {
+.editor_modal_redactive::before {
     content: "";
     position: absolute;
     top: 0;
@@ -28,7 +28,7 @@
     /* Забороняє прокручування */
 }
 
-.editor-container {
+.editor_container {
     background-color: white;
     border-radius: 20px;
     z-index: 1;
@@ -38,37 +38,37 @@
     font-family: "Roboto", sans-serif;
 }
 
-.editor-container-descr {
+.editor_modal_redactive_container {
     padding: 20px 26px;
 }
 
 /* Description head */
 
-.descr-head {
+.redactive_head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 12px;
 }
 
-.descr-user {
+.redactive_user {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.descr-user img {
+.redactive_user_image {
     width: 70px;
     height: 70px;
 }
 
-.descr-user-nick {
+.redactive_user_nick {
     font-weight: 400;
     font-size: 28px;
     color: #000;
 }
 
-.close-button {
+.close_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -81,7 +81,7 @@
     color: #004e89;
 }
 
-.close-button:hover {
+.close_button:hover {
     background-color: #004e89;
     color: white;
     transform: scale(1.1);
@@ -89,11 +89,11 @@
 
 /* Description  */
 
-.description {
+.redactive_description {
     padding: 20px;
 }
 
-.description-area {
+.redactive_description_area {
     width: 90%;
     height: auto;
     min-height: 28px;
@@ -110,11 +110,11 @@
     font-family: "Roboto", sans-serif;
 }
 
-.description-area:focus {
+.redactive_description_area:focus {
     outline: none;
 }
 
-.description-area::placeholder {
+.redactive_description_area::placeholder {
     font-weight: 400;
     font-size: 22px;
     color: #969696;
@@ -124,27 +124,27 @@
 
 
 /* User file */
-.user-file {
+.redactive_user_file {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.user-photo {
+.redactive_user_photo {
     border-radius: 2px;
     max-width: 650px;
     max-height: 450px;
 }
 
 /* Editor publish btn */
-.editor-publish-btn {
+.editor_publish_btn {
     display: flex;
     justify-content: flex-end;
     padding: 16px 24px 0;
     align-items: center;
 }
 
-.publish-btn {
+.publish_btn {
     padding: 10px 52px;
     font-weight: 400;
     font-size: 22px;
@@ -156,10 +156,10 @@
     transition: background-color 0.3s;
 }
 
-.publish-btn:hover {
+.publish_btn:hover {
     background-color: #1f8cc7;
 }
 
-.publish-btn:active {
+.publish_btn:active {
     transform: scale(0.95);
 }

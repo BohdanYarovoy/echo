@@ -1,4 +1,4 @@
-.editor-modal {
+.editor_modal {
     display: none;
     position: fixed;
     top: 0;
@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.editor-modal::before {
+.editor_modal::before {
     content: "";
     position: absolute;
     top: 0;
@@ -23,12 +23,12 @@
     z-index: -1;
 }
 
-.no-scroll {
+.no_scroll {
     overflow: hidden;
     /* Забороняє прокручування */
 }
 
-.editor-container {
+.editor_container {
     background-color: white;
     border-radius: 20px;
     z-index: 1;
@@ -38,21 +38,21 @@
 }
 
 /* Editor head */
-.editor-head {
+.editor_container_head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 24px 40px;
 }
 
-.editor-header {
+.editor_container_header {
     margin: 0;
     font-weight: 400;
     font-size: 30px;
     color: #004e89;
 }
 
-.close-button {
+.close_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -65,7 +65,7 @@
     color: #004e89;
 }
 
-.close-button:hover {
+.close_button:hover {
     background-color: #004e89;
     color: white;
     box-shadow: 0 0 10px #004e89;
@@ -73,7 +73,7 @@
 
 /* Editor window */
 
-.editor-window {
+.editor_window {
     background-color: #f1f1f1;
     display: flex;
     flex-direction: column;
@@ -84,11 +84,11 @@
 
 }
 
-input[type="file"] {
+.input_upload_btn {
     display: none;
 }
 
-label {
+.label_upload_btn {
     display: inline-block;
     color: white;
     background-color: #41BDFF;
@@ -100,15 +100,16 @@ label {
     transition: background-color 0.3s;
 }
 
-label:hover {
+.label_upload_btn:hover {
     background-color: #1f8cc7;
 }
 
-label:active {
+.label_upload_btn:active {
     transform: scale(0.95);
 }
 
-.editor-window-header {
+.editor_window_header {
+    margin: 0;
     font-weight: 400;
     font-size: 30px;
     color: #686868;
@@ -116,29 +117,29 @@ label:active {
 
 /* Editor continue btn */
 
-.editor-continue-btn {
+.editor_continue_btn_container {
     display: flex;
     justify-content: flex-end;
     padding: 32px 24px;
     align-items: center;
 }
 
-.continue-btn {
+.editor_continue_btn {
     padding: 10px 52px;
     font-weight: 400;
     font-size: 22px;
     color: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     border: none;
     background-color: #41BDFF;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.continue-btn:hover {
+.editor_continue_btn:hover {
     background-color: #1f8cc7;
 }
 
-.continue-btn:active {
+.editor_continue_btn:active {
     transform: scale(0.95);
 }
