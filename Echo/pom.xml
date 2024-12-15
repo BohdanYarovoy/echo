@@ -158,7 +158,17 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M7</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include> <!-- Усі класи, які закінчуються на Test -->
+					</includes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  user-service:
+    image: user-service:1.0   # Назва твого образу
+    build: .                   # Якщо потрібно побудувати з Dockerfile
+    ports:
+      - "8081:8081"            # Прокидання портів
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydatabase  # Підключення до БД через ім'я контейнера
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - db                      # Це вказує, що user-service має запускатись після того, як db буде готовий
+
+  db:
+    image: postgres:15          # Використовуємо офіційний образ PostgreSQL
+    environment:
+      POSTGRES_DB: mydatabase   # Назва бази даних
+      POSTGRES_USER: postgres   # Користувач
+      POSTGRES_PASSWORD: postgres  # Пароль
+    ports:
+      - "5432:5432"             # Прокидання порту для доступу до БД ззовні
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Для збереження даних після зупинки контейнера
+
+volumes:
+  postgres-data:
